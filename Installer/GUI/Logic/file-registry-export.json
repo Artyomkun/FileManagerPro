@@ -1,0 +1,63 @@
+{
+  "name": "File Backup List",
+  "nodes": [
+    {
+      "parameters": {
+        "command": "/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh",
+        "arguments": "list /important/data",
+        "additionalArguments": ""
+      },
+      "id": "list-files",
+      "name": "List Important Files",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "operation": "splitInBatches",
+        "batchSize": 1
+      },
+      "id": "split-batches",
+      "name": "Process Each File",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "YOUR_SHEET_ID",
+        "range": "A:Z",
+        "ignoreEmpty": true,
+        "keyRow": 0,
+        "dataMode": "autoMap"
+      },
+      "id": "save-to-sheets",
+      "name": "Save to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [700, 300]
+    }
+  ],
+  "connections": {
+    "List Important Files": {
+      "main": [[
+        {
+          "node": "Process Each File",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    },
+    "Process Each File": {
+      "main": [[
+        {
+          "node": "Save to Google Sheets",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    }
+  }
+}

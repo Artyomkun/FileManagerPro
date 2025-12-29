@@ -1,0 +1,79 @@
+{
+  "name": "Clean Temp Files",
+  "nodes": [
+    {
+      "parameters": {
+        "command": "/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh",
+        "arguments": "search \"*.tmp\" -r /tmp",
+        "additionalArguments": ""
+      },
+      "id": "search-tmp",
+      "name": "Search Temp Files",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "operation": "splitInBatches",
+        "batchSize": 1
+      },
+      "id": "split-files",
+      "name": "Process Each File",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "command": "/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh",
+        "arguments": "delete {{ $json.path }}",
+        "additionalArguments": ""
+      },
+      "id": "delete-file",
+      "name": "Delete Temp File",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "name": "Deleted {{ $json.name }}"
+      },
+      "id": "log-delete",
+      "name": "Log Deletion",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Search Temp Files": {
+      "main": [[
+        {
+          "node": "Process Each File",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    },
+    "Process Each File": {
+      "main": [[
+        {
+          "node": "Delete Temp File",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    },
+    "Delete Temp File": {
+      "main": [[
+        {
+          "node": "Log Deletion",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    }
+  }
+}

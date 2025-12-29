@@ -4,6 +4,9 @@ project(FileOps)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+add_compile_options(-Wno-deprecated-declarations)
+add_compile_options(-Wno-stringop-truncation)
+
 # Создаем библиотеку
 add_library(fileops SHARED
     file_ops.c

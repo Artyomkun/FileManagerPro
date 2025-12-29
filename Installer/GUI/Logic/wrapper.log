@@ -1,0 +1,137 @@
+[2025-12-29 16:53:19] Starting wrapper with args: pwd
+[2025-12-29 16:53:19] ERROR: Binary not found: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator
+[2025-12-29 16:53:55] Starting wrapper with args: pwd
+[2025-12-29 16:53:55] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator pwd
+[2025-12-29 16:53:55] Exit code: 0
+[2025-12-29 16:53:55] Output length: 61
+[2025-12-29 16:53:55] SUCCESS output: {"currentPath":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic"}
+[2025-12-29 16:54:40] Starting wrapper with args: diskinfo .
+[2025-12-29 16:54:40] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator diskinfo .
+[2025-12-29 16:54:40] Exit code: 0
+[2025-12-29 16:54:40] Output length: 298
+[2025-12-29 16:54:40] SUCCESS output: {"path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic","totalBytes":960178941952,"freeBytes":543821656064,"availableBytes":543821656064,"usedBytes":416357285888,"totalFormatted":"894.24 GB","freeFormatted":"506.47 GB","availableFormatted":"506.47 GB","usedFormatted":"387.76 GB","usagePercent":43.4}
+[2025-12-29 16:55:20] Starting wrapper with args: list .
+[2025-12-29 16:55:20] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator list .
+[2025-12-29 16:55:20] Exit code: 0
+[2025-12-29 16:55:20] Output length: 1957
+[2025-12-29 16:55:20] SUCCESS output: {"files":[{"name":"Core","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/Core","type":"directory","size":0,"modified":"2025-12-29 15:50:21","extension":"","isHidden":false,"isReadOnly":false,"permissions":"drwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator","type":"file","size":559360,"modified":"2025-12-29 16:41:56","extension":"","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.cpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.cpp","type":"file","size":31769,"modified":"2025-12-29 16:47:19","extension":"cpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.hpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.hpp","type":"file","size":7086,"modified":"2025-12-21 22:14:04","extension":"hpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":1198,"modified":"2025-12-29 16:55:20","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"modified":"2025-12-29 16:52:41","extension":"sh","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""}]}
+[2025-12-29 16:56:11] Starting wrapper with args: info wrapper.sh
+[2025-12-29 16:56:11] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator info wrapper.sh
+[2025-12-29 16:56:11] Exit code: 0
+[2025-12-29 16:56:11] Output length: 284
+[2025-12-29 16:56:11] SUCCESS output: {"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"sizeFormatted":"1.17 KB","permissions":"-rwxrwxrwx","owner":"artem","group":"artem","isHidden":false,"isReadOnly":false,"symlinkTarget":"","modified":"2025-12-29 16:52:41"}
+[2025-12-29 16:57:02] Starting wrapper with args: mkdir test_folder_n8n
+[2025-12-29 16:57:02] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator mkdir test_folder_n8n
+[2025-12-29 16:57:02] Exit code: 0
+[2025-12-29 16:57:02] Output length: 85
+[2025-12-29 16:57:02] SUCCESS output: {"success":true,"path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/test_folder_n8n"}
+[2025-12-29 16:57:28] Starting wrapper with args: delete test_folder_n8n
+[2025-12-29 16:57:28] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator delete test_folder_n8n
+[2025-12-29 16:57:28] Exit code: 0
+[2025-12-29 16:57:28] Output length: 85
+[2025-12-29 16:57:28] SUCCESS output: {"success":true,"item":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/test_folder_n8n"}
+[2025-12-29 16:57:55] Starting wrapper with args: copy wrapper.sh wrapper_test_copy.sh
+[2025-12-29 16:57:55] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator copy wrapper.sh wrapper_test_copy.sh
+[2025-12-29 16:57:55] Exit code: 0
+[2025-12-29 16:57:55] Output length: 163
+[2025-12-29 16:57:55] SUCCESS output: {"success":true,"source":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","destination":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper_test_copy.sh"}
+[2025-12-29 16:58:25] Starting wrapper with args: rename wrapper_test_copy.sh wrapper_renamed.sh
+[2025-12-29 16:58:25] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator rename wrapper_test_copy.sh wrapper_renamed.sh
+[2025-12-29 16:58:25] Exit code: 0
+[2025-12-29 16:58:25] Output length: 168
+[2025-12-29 16:58:25] SUCCESS output: {"success":true,"oldName":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper_test_copy.sh","newName":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper_renamed.sh"}
+[2025-12-29 16:58:45] Starting wrapper with args: delete wrapper_renamed.sh
+[2025-12-29 16:58:45] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator delete wrapper_renamed.sh
+[2025-12-29 16:58:45] Exit code: 0
+[2025-12-29 16:58:45] Output length: 88
+[2025-12-29 16:58:45] SUCCESS output: {"success":true,"item":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper_renamed.sh"}
+[2025-12-29 16:59:15] Starting wrapper with args: list .
+[2025-12-29 16:59:15] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator list .
+[2025-12-29 16:59:15] Exit code: 0
+[2025-12-29 16:59:15] Output length: 1957
+[2025-12-29 16:59:15] SUCCESS output: {"files":[{"name":"Core","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/Core","type":"directory","size":0,"modified":"2025-12-29 15:50:21","extension":"","isHidden":false,"isReadOnly":false,"permissions":"drwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator","type":"file","size":559360,"modified":"2025-12-29 16:41:56","extension":"","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.cpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.cpp","type":"file","size":31769,"modified":"2025-12-29 16:47:19","extension":"cpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.hpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.hpp","type":"file","size":7086,"modified":"2025-12-21 22:14:04","extension":"hpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":6146,"modified":"2025-12-29 16:59:15","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"modified":"2025-12-29 16:52:41","extension":"sh","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""}]}
+[2025-12-29 16:59:17] Starting wrapper with args: list .
+[2025-12-29 16:59:17] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator list .
+[2025-12-29 16:59:17] Exit code: 0
+[2025-12-29 16:59:17] Output length: 1957
+[2025-12-29 16:59:17] SUCCESS output: {"files":[{"name":"Core","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/Core","type":"directory","size":0,"modified":"2025-12-29 15:50:21","extension":"","isHidden":false,"isReadOnly":false,"permissions":"drwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator","type":"file","size":559360,"modified":"2025-12-29 16:41:56","extension":"","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.cpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.cpp","type":"file","size":31769,"modified":"2025-12-29 16:47:19","extension":"cpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.hpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.hpp","type":"file","size":7086,"modified":"2025-12-21 22:14:04","extension":"hpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":8370,"modified":"2025-12-29 16:59:17","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"modified":"2025-12-29 16:52:41","extension":"sh","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""}]}
+[2025-12-29 16:59:17] Starting wrapper with args: diskinfo .
+[2025-12-29 16:59:17] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator diskinfo .
+[2025-12-29 16:59:17] Exit code: 0
+[2025-12-29 16:59:17] Output length: 298
+[2025-12-29 16:59:17] SUCCESS output: {"path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic","totalBytes":960178941952,"freeBytes":543821643776,"availableBytes":543821643776,"usedBytes":416357298176,"totalFormatted":"894.24 GB","freeFormatted":"506.47 GB","availableFormatted":"506.47 GB","usedFormatted":"387.76 GB","usagePercent":43.4}
+[2025-12-29 16:59:18] Starting wrapper with args: diskinfo .
+[2025-12-29 16:59:18] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator diskinfo .
+[2025-12-29 16:59:18] Exit code: 0
+[2025-12-29 16:59:18] Output length: 298
+[2025-12-29 16:59:18] SUCCESS output: {"path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic","totalBytes":960178941952,"freeBytes":543821643776,"availableBytes":543821643776,"usedBytes":416357298176,"totalFormatted":"894.24 GB","freeFormatted":"506.47 GB","availableFormatted":"506.47 GB","usedFormatted":"387.76 GB","usagePercent":43.4}
+[2025-12-29 16:59:18] Starting wrapper with args: search wrapper
+[2025-12-29 16:59:18] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator search wrapper
+[2025-12-29 16:59:18] Exit code: 0
+[2025-12-29 16:59:18] Output length: 527
+[2025-12-29 16:59:18] SUCCESS output: {"results":[{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":11754,"modified":"2025-12-29 16:59:18","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"modified":"2025-12-29 16:52:41","symlinkTarget":""}],"count":3}
+[2025-12-29 16:59:19] Starting wrapper with args: search wrapper
+[2025-12-29 16:59:19] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator search wrapper
+[2025-12-29 16:59:19] Exit code: 0
+[2025-12-29 16:59:19] Output length: 527
+[2025-12-29 16:59:19] SUCCESS output: {"results":[{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":12563,"modified":"2025-12-29 16:59:18","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"modified":"2025-12-29 16:52:41","symlinkTarget":""}],"count":3}
+[2025-12-29 16:59:19] Starting wrapper with args: info wrapper.sh
+[2025-12-29 16:59:19] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator info wrapper.sh
+[2025-12-29 16:59:19] Exit code: 0
+[2025-12-29 16:59:19] Output length: 284
+[2025-12-29 16:59:19] SUCCESS output: {"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"sizeFormatted":"1.17 KB","permissions":"-rwxrwxrwx","owner":"artem","group":"artem","isHidden":false,"isReadOnly":false,"symlinkTarget":"","modified":"2025-12-29 16:52:41"}
+[2025-12-29 16:59:19] Starting wrapper with args: info wrapper.sh
+[2025-12-29 16:59:19] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator info wrapper.sh
+[2025-12-29 16:59:19] Exit code: 0
+[2025-12-29 16:59:19] Output length: 284
+[2025-12-29 16:59:19] SUCCESS output: {"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"sizeFormatted":"1.17 KB","permissions":"-rwxrwxrwx","owner":"artem","group":"artem","isHidden":false,"isReadOnly":false,"symlinkTarget":"","modified":"2025-12-29 16:52:41"}
+[2025-12-29 16:59:19] Starting wrapper with args: mkdir test_n8n_1767016759
+[2025-12-29 16:59:19] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator mkdir test_n8n_1767016759
+[2025-12-29 16:59:19] Exit code: 0
+[2025-12-29 16:59:20] Output length: 89
+[2025-12-29 16:59:20] SUCCESS output: {"success":true,"path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/test_n8n_1767016759"}
+[2025-12-29 16:59:20] Starting wrapper with args: list .
+[2025-12-29 16:59:20] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator list .
+[2025-12-29 16:59:20] Exit code: 0
+[2025-12-29 16:59:20] Output length: 2252
+[2025-12-29 16:59:20] SUCCESS output: {"files":[{"name":"Core","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/Core","type":"directory","size":0,"modified":"2025-12-29 15:50:21","extension":"","isHidden":false,"isReadOnly":false,"permissions":"drwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"test_n8n_1767016759","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/test_n8n_1767016759","type":"directory","size":0,"modified":"2025-12-29 16:59:19","extension":"","isHidden":false,"isReadOnly":false,"permissions":"drwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator","type":"file","size":559360,"modified":"2025-12-29 16:41:56","extension":"","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.cpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.cpp","type":"file","size":31769,"modified":"2025-12-29 16:47:19","extension":"cpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.hpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.hpp","type":"file","size":7086,"modified":"2025-12-21 22:14:04","extension":"hpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":14884,"modified":"2025-12-29 16:59:20","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"modified":"2025-12-29 16:52:41","extension":"sh","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""}]}
+[2025-12-29 16:59:20] Starting wrapper with args: delete test_n8n_1767016759
+[2025-12-29 16:59:20] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator delete test_n8n_1767016759
+[2025-12-29 16:59:20] Exit code: 0
+[2025-12-29 16:59:20] Output length: 89
+[2025-12-29 16:59:20] SUCCESS output: {"success":true,"item":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/test_n8n_1767016759"}
+[2025-12-29 17:03:25] Starting wrapper with args: list .
+[2025-12-29 17:03:25] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator list .
+[2025-12-29 17:03:25] Exit code: 0
+[2025-12-29 17:03:25] Output length: 1958
+[2025-12-29 17:03:25] SUCCESS output: {"files":[{"name":"Core","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/Core","type":"directory","size":0,"modified":"2025-12-29 15:50:21","extension":"","isHidden":false,"isReadOnly":false,"permissions":"drwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator","type":"file","size":559360,"modified":"2025-12-29 16:41:56","extension":"","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.cpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.cpp","type":"file","size":31769,"modified":"2025-12-29 16:47:19","extension":"cpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.hpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.hpp","type":"file","size":7086,"modified":"2025-12-21 22:14:04","extension":"hpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":17797,"modified":"2025-12-29 17:03:25","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"modified":"2025-12-29 16:52:41","extension":"sh","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""}]}
+[2025-12-29 17:03:25] Starting wrapper with args: diskinfo .
+[2025-12-29 17:03:25] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator diskinfo .
+[2025-12-29 17:03:25] Exit code: 0
+[2025-12-29 17:03:25] Output length: 298
+[2025-12-29 17:03:25] SUCCESS output: {"path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic","totalBytes":960178941952,"freeBytes":543754526720,"availableBytes":543754526720,"usedBytes":416424415232,"totalFormatted":"894.24 GB","freeFormatted":"506.41 GB","availableFormatted":"506.41 GB","usedFormatted":"387.83 GB","usagePercent":43.4}
+[2025-12-29 17:03:25] Starting wrapper with args: info wrapper.sh
+[2025-12-29 17:03:25] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator info wrapper.sh
+[2025-12-29 17:03:25] Exit code: 0
+[2025-12-29 17:03:25] Output length: 284
+[2025-12-29 17:03:25] SUCCESS output: {"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":1193,"sizeFormatted":"1.17 KB","permissions":"-rwxrwxrwx","owner":"artem","group":"artem","isHidden":false,"isReadOnly":false,"symlinkTarget":"","modified":"2025-12-29 16:52:41"}
+[2025-12-29 17:19:42] Starting wrapper with args: pwd
+[2025-12-29 17:19:42] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator pwd
+[2025-12-29 17:19:42] Exit code: 0
+[2025-12-29 17:19:42] Output length: 61
+[2025-12-29 17:19:42] SUCCESS output: {"currentPath":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic"}
+[2025-12-29 17:19:43] Starting wrapper with args: list .
+[2025-12-29 17:19:43] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator list .
+[2025-12-29 17:19:43] Exit code: 0
+[2025-12-29 17:19:43] Output length: 2878
+[2025-12-29 17:19:43] SUCCESS output: {"files":[{"name":"Core","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/Core","type":"directory","size":0,"modified":"2025-12-29 15:50:21","extension":"","isHidden":false,"isReadOnly":false,"permissions":"drwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"disk-space-alert.json","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/disk-space-alert.json","type":"file","size":1648,"modified":"2025-12-29 17:13:33","extension":"json","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"file-registry-export.json","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/file-registry-export.json","type":"file","size":1427,"modified":"2025-12-29 17:13:46","extension":"json","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"n8n_wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/n8n_wrapper.log","type":"file","size":159,"modified":"2025-12-29 16:52:01","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator","type":"file","size":559360,"modified":"2025-12-29 16:41:56","extension":"","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.cpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.cpp","type":"file","size":31769,"modified":"2025-12-29 16:47:19","extension":"cpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"navigator.hpp","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator.hpp","type":"file","size":7086,"modified":"2025-12-21 22:14:04","extension":"hpp","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"tmp-cleanup-automation.json","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/tmp-cleanup-automation.json","type":"file","size":1797,"modified":"2025-12-29 17:13:58","extension":"json","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.log","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.log","type":"file","size":21482,"modified":"2025-12-29 17:19:43","extension":"log","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""},{"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":3404,"modified":"2025-12-29 17:18:43","extension":"sh","isHidden":false,"isReadOnly":false,"permissions":"-rwxrwxrwx","owner":"artem","group":"artem","symlinkTarget":""}]}
+[2025-12-29 17:19:43] Starting wrapper with args: diskinfo .
+[2025-12-29 17:19:43] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator diskinfo .
+[2025-12-29 17:19:43] Exit code: 0
+[2025-12-29 17:19:43] Output length: 298
+[2025-12-29 17:19:43] SUCCESS output: {"path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic","totalBytes":960178941952,"freeBytes":543754506240,"availableBytes":543754506240,"usedBytes":416424435712,"totalFormatted":"894.24 GB","freeFormatted":"506.41 GB","availableFormatted":"506.41 GB","usedFormatted":"387.83 GB","usagePercent":43.4}
+[2025-12-29 17:19:43] Starting wrapper with args: info wrapper.sh
+[2025-12-29 17:19:43] Executing: /mnt/d/c/FileManagerPro/Installer/GUI/Logic/navigator info wrapper.sh
+[2025-12-29 17:19:43] Exit code: 0
+[2025-12-29 17:19:43] Output length: 284
+[2025-12-29 17:19:43] SUCCESS output: {"name":"wrapper.sh","path":"/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh","type":"file","size":3404,"sizeFormatted":"3.32 KB","permissions":"-rwxrwxrwx","owner":"artem","group":"artem","isHidden":false,"isReadOnly":false,"symlinkTarget":"","modified":"2025-12-29 17:18:43"}

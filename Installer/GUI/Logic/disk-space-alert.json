@@ -1,0 +1,67 @@
+{
+  "name": "Disk Monitor",
+  "nodes": [
+    {
+      "parameters": {
+        "command": "/mnt/d/c/FileManagerPro/Installer/GUI/Logic/wrapper.sh",
+        "arguments": "diskinfo /",
+        "additionalArguments": ""
+      },
+      "id": "disk-info",
+      "name": "Get Disk Info",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.usagePercent }}",
+              "operation": "larger",
+              "value2": 80
+            }
+          ]
+        }
+      },
+      "id": "check-threshold",
+      "name": "Check Threshold > 80%",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "subject": "⚠️ Disk Warning: {{ $json.usagePercent }}% used",
+        "text": "Path: {{ $json.path }}\nTotal: {{ $json.totalFormatted }}\nUsed: {{ $json.usedFormatted }}\nFree: {{ $json.freeFormatted }}\nUsage: {{ $json.usagePercent }}%",
+        "to": "admin@example.com"
+      },
+      "id": "send-email",
+      "name": "Send Alert Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1,
+      "position": [700, 300]
+    }
+  ],
+  "connections": {
+    "Get Disk Info": {
+      "main": [[
+        {
+          "node": "Check Threshold > 80%",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    },
+    "Check Threshold > 80%": {
+      "main": [[
+        {
+          "node": "Send Alert Email",
+          "type": "main",
+          "index": 0
+        }
+      ]]
+    }
+  }
+}

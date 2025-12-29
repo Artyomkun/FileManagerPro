@@ -816,24 +816,3 @@ private:
         return oss.str();
     }
 };
-
-// Точка входа для n8n
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        std::cout << "Usage: navigator_n8n <command> [args...]" << std::endl;
-        std::cout << "Commands: list, cd, search, info, mkdir, delete, copy, move, rename, pwd, diskinfo" << std::endl;
-        return 1;
-    }
-    
-    FileNavigator navigator;
-    std::vector<std::string> args;
-    
-    for (int i = 2; i < argc; i++) {
-        args.push_back(argv[i]);
-    }
-    
-    std::string result = navigator.execute_command(argv[1], args);
-    std::cout << result << std::endl;
-    
-    return 0;
-}

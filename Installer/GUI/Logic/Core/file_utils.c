@@ -108,6 +108,9 @@ typedef struct {
 #define PERM_EXECUTE 0x04
 #endif
 
+void time_to_string(time_t t, char* buffer, size_t buffer_size);
+void get_permissions_string(mode_t mode, char* buffer);
+
 // ==================== Базовые утилиты ====================
 // Глобальные переменные для n8n контекста
 static char n8n_workflow_id[64] = "";
@@ -192,6 +195,10 @@ void get_filename_without_extension(const char* filename, char* output, size_t s
 
 // Объединение путей с учетом разделителей
 void join_paths(const char* path1, const char* path2, char* result, size_t size) {
+    if (size == 0) {
+        return;
+    }
+    
     if (path1[0] == '\0') {
         strncpy(result, path2, size - 1);
         result[size - 1] = '\0';
@@ -205,22 +212,34 @@ void join_paths(const char* path1, const char* path2, char* result, size_t size)
     }
     
     size_t len1 = strlen(path1);
-    int has_separator = (path1[len1 - 1] == '/');
+    int has_separator = (len1 > 0 && path1[len1 - 1] == '/');
     int needs_separator = (path2[0] != '/');
     
     if (has_separator && !needs_separator) {
         // Удаляем лишний разделитель
-        char temp[PATH_MAX];
-        strncpy(temp, path1, sizeof(temp) - 1);
-        temp[sizeof(temp) - 1] = '\0';
-        temp[len1 - 1] = '\0';
-        snprintf(result, size, "%s%s", temp, path2);
+        if (len1 == 1 && path1[0] == '/') {
+            // Особый случай: path1 это только "/"
+            snprintf(result, size, "/%s", path2);
+        } else if (len1 > 1) {
+            // Создаем копию без последнего слеша
+            char temp[PATH_MAX];
+            strncpy(temp, path1, sizeof(temp) - 1);
+            temp[sizeof(temp) - 1] = '\0';
+            temp[len1 - 1] = '\0'; // Удаляем последний '/'
+            snprintf(result, size, "%s%s", temp, path2);
+        } else {
+            // Если len1 == 1 и не "/", то это ошибка в логике
+            snprintf(result, size, "%s%s", path1, path2);
+        }
     } else if (!has_separator && needs_separator) {
         // Добавляем разделитель
         snprintf(result, size, "%s/%s", path1, path2);
     } else {
         snprintf(result, size, "%s%s", path1, path2);
     }
+    
+    // Гарантируем завершающий нуль-символ
+    result[size - 1] = '\0';
 }
 
 // Нормализация пути (замена обратных слешей, удаление точек)
@@ -264,17 +283,37 @@ void normalize_path(const char* path, char* result, size_t size) {
 
 // Получение абсолютного пути
 int get_absolute_path(const char* relative_path, char* absolute_path, size_t size) {
+    if (size == 0) {
+        return EINVAL;  
+    }
+    
     if (realpath(relative_path, absolute_path) == NULL) {
         return errno;
     }
+    
+    if (strlen(absolute_path) >= size) {
+        return ERANGE;  
+    }
+    
     return 0;
 }
 
 // Получение реального пути (с разрешением симлинков)
 int get_real_path(const char* path, char* real_path, size_t size) {
+    // Используйте параметр size
+    if (size == 0) {
+        return EINVAL;
+    }
+    
     if (realpath(path, real_path) == NULL) {
         return errno;
     }
+    
+    // Проверка длины
+    if (strlen(real_path) >= size) {
+        return ERANGE;
+    }
+    
     return 0;
 }
 
@@ -575,6 +614,139 @@ int is_safe_path(const char* path) {
     return 1; // Безопасно
 }
 
+// ==================== Рекурсивная функция поиска ====================
+
+static void search_directory(const char* currentPath, int currentDepth, 
+                             N8N_ListOptions options, 
+                             N8N_FileInfo** files, 
+                             int* capacity, int* fileCount) {
+    if (currentDepth > options.maxDepth) return;
+    
+    DIR* dir = opendir(currentPath);
+    if (dir == NULL) {
+        n8n_log("WARN", "Cannot access directory");
+        return;
+    }
+    
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != NULL) {
+        // Пропускаем служебные записи
+        if (strcmp(entry->d_name, ".") == 0 ||
+            strcmp(entry->d_name, "..") == 0) {
+            continue;
+        }
+        
+        // Проверяем скрытые файлы (начинаются с точки в Linux)
+        bool isHidden = (entry->d_name[0] == '.');
+        if (!options.showHidden && isHidden) {
+            continue;
+        }
+        
+        // Проверяем фильтр по имени
+        if (options.filter[0] != '\0') {
+            // Простая фильтрация по подстроке
+            if (strstr(entry->d_name, options.filter) == NULL) {
+                continue;
+            }
+        }
+        
+        // Полный путь
+        char fullPath[PATH_MAX];
+        snprintf(fullPath, sizeof(fullPath), "%s/%s", currentPath, entry->d_name);
+        
+        // Получение информации о файле
+        struct stat statbuf;
+        int stat_result;
+        
+        if (options.followSymlinks) {
+            stat_result = stat(fullPath, &statbuf);
+        } else {
+            stat_result = lstat(fullPath, &statbuf);
+        }
+        
+        if (stat_result != 0) {
+            continue; // Не удалось получить информацию о файле
+        }
+        
+        bool isDir = S_ISDIR(statbuf.st_mode);
+        bool isLink = S_ISLNK(statbuf.st_mode);
+        
+        // Увеличиваем массив при необходимости
+        if (*fileCount >= *capacity) {
+            *capacity *= 2;
+            N8N_FileInfo* temp = (N8N_FileInfo*)realloc(*files, *capacity * sizeof(N8N_FileInfo));
+            if (temp == NULL) {
+                n8n_log("ERROR", "Failed to reallocate memory");
+                break;
+            }
+            *files = temp;
+        }
+        
+        // Заполняем информацию о файле
+        N8N_FileInfo* fi = &(*files)[*fileCount];
+        
+        // Базовые поля
+        strncpy(fi->name, entry->d_name, sizeof(fi->name) - 1);
+        fi->name[sizeof(fi->name) - 1] = '\0';
+        
+        // Полный путь
+        strncpy(fi->path, fullPath, sizeof(fi->path) - 1);
+        fi->path[sizeof(fi->path) - 1] = '\0';
+        
+        // Тип файла
+        if (isLink) {
+            strcpy(fi->type, "symlink");
+            fi->isDirectory = false;
+        } else if (isDir) {
+            strcpy(fi->type, "directory");
+            fi->isDirectory = true;
+        } else {
+            strcpy(fi->type, "file");
+            fi->isDirectory = false;
+        }
+        
+        // Размер
+        fi->size = isDir ? -1 : statbuf.st_size;
+        
+        // Временные метки
+        time_to_string(statbuf.st_mtime, fi->modified, sizeof(fi->modified));
+        time_to_string(statbuf.st_ctime, fi->created, sizeof(fi->created));
+        
+        // Права доступа
+        get_permissions_string(statbuf.st_mode, fi->permissions_str);
+        
+        // Владелец и группа
+        struct passwd* pw = getpwuid(statbuf.st_uid);
+        struct group* gr = getgrgid(statbuf.st_gid);
+        
+        if (pw) {
+            strncpy(fi->owner, pw->pw_name, sizeof(fi->owner) - 1);
+            fi->owner[sizeof(fi->owner) - 1] = '\0';
+        } else {
+            snprintf(fi->owner, sizeof(fi->owner), "%d", statbuf.st_uid);
+        }
+        
+        if (gr) {
+            strncpy(fi->group, gr->gr_name, sizeof(fi->group) - 1);
+            fi->group[sizeof(fi->group) - 1] = '\0';
+        } else {
+            snprintf(fi->group, sizeof(fi->group), "%d", statbuf.st_gid);
+        }
+        
+        // Атрибуты
+        fi->isHidden = isHidden;
+        fi->depth = currentDepth;
+        
+        (*fileCount)++;
+        
+        // Рекурсивный обход для директорий
+        if (options.recursive && isDir && !isLink) {
+            search_directory(fullPath, currentDepth + 1, options, files, capacity, fileCount);
+        }
+    }
+    
+    closedir(dir);
+}
 // ==================== MD5 хеширование ====================
 
 // Простая реализация MD5 для Linux
@@ -730,9 +902,23 @@ const char* get_mime_type(const char* filename) {
 
 // Создание JSON строки для n8n (упрощенная версия)
 void create_n8n_json_response(void* result, char* json_buffer, size_t buffer_size) {
-    // Эта функция зависит от структуры N8N_Result
-    // Здесь базовая реализация
-    snprintf(json_buffer, buffer_size, "{\"success\": true, \"message\": \"JSON response generated\"}");
+    if (!json_buffer || buffer_size == 0) {
+        return;
+    }
+    
+    // Приводим result к правильному типу
+    N8N_Result* n8n_result = (N8N_Result*)result;
+    
+    if (n8n_result) { 
+        snprintf(json_buffer, buffer_size, 
+                "{\"success\": %s, \"message\": \"%s\", \"errorCode\": %d}",
+                n8n_result->success ? "true" : "false",
+                n8n_result->message,
+                n8n_result->errorCode);
+    } else { 
+        snprintf(json_buffer, buffer_size, 
+                "{\"success\": true, \"message\": \"JSON response generated\"}");
+    }
 }
 
 // ==================== Работа с символическими ссылками ====================
@@ -844,7 +1030,7 @@ int get_n8n_file_info(const char* path, N8N_FileInfo* info) {
     
     // Права доступа
     info->permissions = statbuf.st_mode & 0777;
-    permissions_to_string(statbuf.st_mode, info->permissions_str);
+    get_permissions_string(statbuf.st_mode, info->permissions_str);
     
     // Дополнительная информация
     info->inode = statbuf.st_ino;
@@ -873,135 +1059,8 @@ N8N_Result n8n_list_files(const char* path, N8N_ListOptions options) {
         return result;
     }
     
-    // Рекурсивная функция для обхода директорий
-    void search_directory(const char* currentPath, int currentDepth) {
-        if (currentDepth > options.maxDepth) return;
-        
-        DIR* dir = opendir(currentPath);
-        if (dir == NULL) {
-            n8n_log("WARN", "Cannot access directory");
-            return;
-        }
-        
-        struct dirent* entry;
-        while ((entry = readdir(dir)) != NULL) {
-            // Пропускаем служебные записи
-            if (strcmp(entry->d_name, ".") == 0 ||
-                strcmp(entry->d_name, "..") == 0) {
-                continue;
-            }
-            
-            // Проверяем скрытые файлы (начинаются с точки в Linux)
-            bool isHidden = (entry->d_name[0] == '.');
-            if (!options.showHidden && isHidden) {
-                continue;
-            }
-            
-            // Проверяем фильтр по имени
-            if (options.filter[0] != '\0') {
-                // Простая фильтрация по подстроке
-                if (strstr(entry->d_name, options.filter) == NULL) {
-                    continue;
-                }
-            }
-            
-            // Полный путь
-            char fullPath[PATH_MAX];
-            snprintf(fullPath, sizeof(fullPath), "%s/%s", currentPath, entry->d_name);
-            
-            // Получение информации о файле
-            struct stat statbuf;
-            int stat_result;
-            
-            if (options.followSymlinks) {
-                stat_result = stat(fullPath, &statbuf);
-            } else {
-                stat_result = lstat(fullPath, &statbuf);
-            }
-            
-            if (stat_result != 0) {
-                continue; // Не удалось получить информацию о файле
-            }
-            
-            bool isDir = S_ISDIR(statbuf.st_mode);
-            bool isLink = S_ISLNK(statbuf.st_mode);
-            
-            // Увеличиваем массив при необходимости
-            if (fileCount >= capacity) {
-                capacity *= 2;
-                N8N_FileInfo* temp = (N8N_FileInfo*)realloc(files, capacity * sizeof(N8N_FileInfo));
-                if (temp == NULL) {
-                    n8n_log("ERROR", "Failed to reallocate memory");
-                    break;
-                }
-                files = temp;
-            }
-            
-            // Заполняем информацию о файле
-            N8N_FileInfo* fi = &files[fileCount];
-            
-            // Базовые поля
-            strncpy(fi->name, entry->d_name, sizeof(fi->name) - 1);
-            fi->name[sizeof(fi->name) - 1] = '\0';
-            
-            // Полный путь
-            strncpy(fi->path, fullPath, sizeof(fi->path) - 1);
-            
-            // Тип файла
-            if (isLink) {
-                strcpy(fi->type, "symlink");
-                fi->isDirectory = false;
-            } else if (isDir) {
-                strcpy(fi->type, "directory");
-                fi->isDirectory = true;
-            } else {
-                strcpy(fi->type, "file");
-                fi->isDirectory = false;
-            }
-            
-            // Размер
-            fi->size = isDir ? -1 : statbuf.st_size;
-            
-            // Временные метки
-            time_to_string(statbuf.st_mtime, fi->modified, sizeof(fi->modified));
-            time_to_string(statbuf.st_ctime, fi->created, sizeof(fi->created));
-            
-            // Права доступа
-            get_permissions_string(statbuf.st_mode, fi->permissions);
-            
-            // Владелец и группа
-            struct passwd* pw = getpwuid(statbuf.st_uid);
-            struct group* gr = getgrgid(statbuf.st_gid);
-            
-            if (pw) {
-                strncpy(fi->owner, pw->pw_name, sizeof(fi->owner) - 1);
-            } else {
-                snprintf(fi->owner, sizeof(fi->owner), "%d", statbuf.st_uid);
-            }
-            
-            if (gr) {
-                strncpy(fi->group, gr->gr_name, sizeof(fi->group) - 1);
-            } else {
-                snprintf(fi->group, sizeof(fi->group), "%d", statbuf.st_gid);
-            }
-            
-            // Атрибуты
-            fi->isHidden = isHidden;
-            fi->depth = currentDepth;
-            
-            fileCount++;
-            
-            // Рекурсивный обход для директорий
-            if (options.recursive && isDir && !isLink) {
-                search_directory(fullPath, currentDepth + 1);
-            }
-        }
-        
-        closedir(dir);
-    }
-    
     // Начинаем поиск
-    search_directory(path, 0);
+    search_directory(path, 0, options, &files, &capacity, &fileCount);
     
     // Формируем результат для n8n
     result.success = true;

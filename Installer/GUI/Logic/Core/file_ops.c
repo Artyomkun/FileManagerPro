@@ -37,4 +37,4 @@ void get_permissions_string(mode_t mode, char* buffer) {
     buffer[8] = (mode & S_IWOTH) ? 'w' : '-';
     buffer[9] = (mode & S_IXOTH) ? 'x' : '-';
     buffer[10] = '\0';
-}
+} 

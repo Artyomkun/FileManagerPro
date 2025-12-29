@@ -5,6 +5,8 @@ RUN apt-get update && \
     apt-get install -y \
     # Инструменты сборки
     gcc g++ cmake make libuuid1 uuid-dev \
+    # C/C++ зависимости (libdl уже входит в libc6-dev)
+    libc6-dev build-essential pkg-config \
     # X11 зависимости
     xauth x11-apps x11-utils \
     libx11-dev libxrandr-dev libxcursor-dev libxi-dev \
@@ -24,6 +26,7 @@ RUN apt-get update && \
     openssh-client \
     sshpass \
     expect \
+    jq \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. ОТКЛЮЧЕНИЕ ТЕЛЕМЕТРИИ (КРИТИЧЕСКИ ВАЖНО!)
@@ -58,14 +61,24 @@ RUN cd /app/Installer/GUI/Logic/Core && \
     cmake .. && \
     make
 
-# 8. Сборка C++ навигатора
+# 8. Сборка C++ навигатора с поддержкой библиотеки
 RUN cd /app/Installer/GUI/Logic && \
-    g++ -c -fPIC navigator.cpp -o navigator.o && \
-    g++ -shared -o libnavigator.so navigator.o
+    # Компилируем fileops_loader
+    g++ -fPIC -c fileops_loader.cpp -o fileops_loader.o && \
+    # Компилируем navigator
+    g++ -fPIC -c navigator.cpp -o navigator.o && \
+    # Компилируем main
+    g++ -fPIC -c main.cpp -o main.o && \
+    g++ -o navigator main.o navigator.o fileops_loader.o -ldl -lpthread && \
+    # Создаем обертку
+    chmod +x wrapper.sh navigator && \
+    # Создаем симлинки для удобства
+    ln -sf Core/build/bin/libfileops.so libfileops.so 2>/dev/null || true
 
 # 9. Копирование библиотек в нужное место
 RUN cp -f /app/Installer/GUI/Logic/Core/build/bin/libfileops.so /app/Installer/GUI/ 2>/dev/null || true && \
-    cp -f /app/Installer/GUI/Logic/libnavigator.so /app/Installer/GUI/ 2>/dev/null || true
+    cp -f /app/Installer/GUI/Logic/output/navigator /app/Installer/GUI/ 2>/dev/null || true && \
+    cp -f /app/Installer/GUI/Logic/wrapper.sh /app/Installer/GUI/ 2>/dev/null || true
 
 # 10. Восстановление NuGet пакетов
 RUN cd /app/Installer/GUI && \
@@ -85,14 +98,20 @@ RUN cd /app/Installer/GUI && \
     -r linux-x64 --self-contained true \
     -p:PublishSingleFile=false
 
-# 12.1. Установка прав доступа для appuser
+# 13. Копирование необходимых файлов в publish
+RUN cp -f /app/Installer/GUI/Logic/output/navigator /app/publish/ 2>/dev/null || true && \
+    cp -f /app/Installer/GUI/Logic/wrapper.sh /app/publish/ 2>/dev/null || true && \
+    mkdir -p /app/publish/Core && \
+    cp -rf /app/Installer/GUI/Logic/Core/build/bin /app/publish/Core/ 2>/dev/null || true
+
+# 14. Установка прав доступа для appuser
 RUN chown -R appuser:appuser /app/publish
 
-# 13. Копируем и настраиваем entrypoint.sh
+# 15. Копируем и настраиваем entrypoint.sh
 COPY Installer/entrypoint.sh /app/publish/entrypoint.sh
 RUN chmod +x /app/publish/entrypoint.sh
 
-# 14. Установка рабочей директории и пользователя
+# 16. Установка рабочей директории и пользователя
 USER appuser
 WORKDIR /app/publish
 
