@@ -1,0 +1,157 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "Avalonia >= 11.3.0",
+      "Avalonia.BuildServices >= 11.3.0",
+      "Avalonia.Controls.DataGrid >= 11.3.0",
+      "Avalonia.Desktop >= 11.3.0",
+      "Avalonia.Diagnostics >= 11.3.0",
+      "Avalonia.Fonts.Inter >= 11.3.0",
+      "Avalonia.Markup.Xaml.Loader >= 11.3.0",
+      "Avalonia.Themes.Fluent >= 11.3.0",
+      "Avalonia.Xaml.Behaviors >= 11.3.0",
+      "Mono.Posix.NETStandard >= 1.0.0",
+      "System.Text.Json >= 8.0.5"
+    ]
+  },
+  "packageFolders": {
+    "/home/artem/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/mnt/d/c/FileManagerPro/Installer/GUI/FileManager.csproj",
+      "projectName": "FileManager",
+      "projectPath": "/mnt/d/c/FileManagerPro/Installer/GUI/FileManager.csproj",
+      "packagesPath": "/home/artem/.nuget/packages/",
+      "outputPath": "/mnt/d/c/FileManagerPro/Installer/GUI/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/home/artem/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "Avalonia": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.BuildServices": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.Controls.DataGrid": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.Desktop": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.Diagnostics": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.Fonts.Inter": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.Markup.Xaml.Loader": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.Themes.Fluent": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Avalonia.Xaml.Behaviors": {
+            "target": "Package",
+            "version": "[11.3.0, )"
+          },
+          "Mono.Posix.NETStandard": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          },
+          "System.Text.Json": {
+            "target": "Package",
+            "version": "[8.0.5, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.416/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Avalonia.Desktop.11.3.0' from 'https://api.nuget.org/v3-flatcontainer/avalonia.desktop/11.3.0/avalonia.desktop.11.3.0.nupkg'.\nResource temporarily unavailable (api.nuget.org:443)\n  Resource temporarily unavailable"
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Avalonia.Diagnostics.11.3.0' from 'https://api.nuget.org/v3-flatcontainer/avalonia.diagnostics/11.3.0/avalonia.diagnostics.11.3.0.nupkg'.\nResource temporarily unavailable (api.nuget.org:443)\n  Resource temporarily unavailable"
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Avalonia.Fonts.Inter.11.3.0' from 'https://api.nuget.org/v3-flatcontainer/avalonia.fonts.inter/11.3.0/avalonia.fonts.inter.11.3.0.nupkg'.\nResource temporarily unavailable (api.nuget.org:443)\n  Resource temporarily unavailable"
+    },
+    {
+      "code": "Undefined",
+      "level": "Error",
+      "message": "Failed to download package 'Avalonia.Markup.Xaml.Loader.11.3.0' from 'https://api.nuget.org/v3-flatcontainer/avalonia.markup.xaml.loader/11.3.0/avalonia.markup.xaml.loader.11.3.0.nupkg'.\nResource temporarily unavailable (api.nuget.org:443)\n  Resource temporarily unavailable"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "Failed to retrieve information about 'Avalonia.Remote.Protocol' from remote source 'https://api.nuget.org/v3-flatcontainer/avalonia.remote.protocol/index.json'.",
+      "libraryId": "Avalonia.Remote.Protocol"
+    }
+  ]
+}

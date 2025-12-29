@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SystemConfiguration>
+    <!-- Application Identity -->
+    <ApplicationInfo>
+        <Name>FileManagerPro</Name>
+        <Version>2.1.0</Version>
+        <Vendor>YourCompany</Vendor>
+        <BuildType>Release</BuildType>
+        <LicenseKey>DEMO-XXXX-XXXX-XXXX</LicenseKey>
+    </ApplicationInfo>
+    <!-- File System Settings -->
+    <FileSystem>
+        <DefaultRootPath>C:\FileManagerPro</DefaultRootPath>
+        <TempDirectory>%TEMP%\FileManagerPro\Cache</TempDirectory>
+        <MaxFileSize unit="MB">1024</MaxFileSize>
+        <SupportedExtensions>
+            <Extension>.txt</Extension>
+            <Extension>.pdf</Extension>
+            <Extension>.doc</Extension>
+            <Extension>.docx</Extension>
+            <Extension>.jpg</Extension>
+            <Extension>.png</Extension>
+            <Extension>.zip</Extension>
+            <Extension>.rar</Extension>
+        </SupportedExtensions>
+        <Indexing Enabled="true">
+            <AutoIndexInterval unit="minutes">30</AutoIndexInterval>
+            <IndexLocation>%APPDATA%\FileManagerPro\Index</IndexLocation>
+        </Indexing>
+    </FileSystem>
+    <!-- User Interface Configuration -->
+    <UserInterface>
+        <Theme>Dark</Theme>
+        <Language>ru-RU</Language>
+        <Layout>
+            <DefaultView>Details</DefaultView>
+            <ShowHiddenFiles>false</ShowHiddenFiles>
+            <ShowFileExtensions>true</ShowFileExtensions>
+            <GridIconSize unit="px">64</GridIconSize>
+        </Layout>
+        <FontSettings>
+            <FontFamily>Segoe UI</FontFamily>
+            <FontSize unit="pt">10</FontSize>
+        </FontSettings>
+    </UserInterface>
+    <!-- Security Settings -->
+    <Security>
+        <Authentication>
+            <Mode>WindowsIntegrated</Mode>
+            <MaxLoginAttempts>5</MaxLoginAttempts>
+            <LockoutDuration unit="minutes">15</LockoutDuration>
+        </Authentication>
+        <Encryption>
+            <EnableFileEncryption>true</EnableFileEncryption>
+            <Algorithm>AES-256</Algorithm>
+        </Encryption>
+        <AuditLog Enabled="true">
+            <LogPath>%PROGRAMDATA%\FileManagerPro\Audit</LogPath>
+            <RetentionDays>90</RetentionDays>
+        </AuditLog>
+    </Security>
+    <!-- Performance Settings -->
+    <Performance>
+        <Caching Enabled="true">
+            <MemoryCacheSize unit="MB">512</MemoryCacheSize>
+            <DiskCacheSize unit="MB">1024</DiskCacheSize>
+            <CacheLocation>%LOCALAPPDATA%\FileManagerPro\Cache</CacheLocation>
+        </Caching>
+        <Multithreading>
+            <MaxWorkerThreads>8</MaxWorkerThreads>
+            <IOThreadMultiplier>2.0</IOThreadMultiplier>
+        </Multithreading>
+        <MemoryManagement>
+            <GarbageCollection>Automatic</GarbageCollection>
+            <MaxMemoryUsage unit="MB">2048</MaxMemoryUsage>
+        </MemoryManagement>
+    </Performance>
+    <!-- Network and Cloud Settings -->
+    <Network>
+        <Proxy Enabled="false">
+            <Address>proxy.example.com</Address>
+            <Port>8080</Port>
+            <Credentials>
+                <Username></Username>
+                <Password Encrypted="true"></Password>
+            </Credentials>
+        </Proxy>
+        <CloudServices>
+            <OneDrive Enabled="true"/>
+            <GoogleDrive Enabled="false"/>
+            <Dropbox Enabled="false"/>
+        </CloudServices>
+        <UpdateSettings>
+            <AutoCheck>true</AutoCheck>
+            <CheckInterval unit="hours">24</CheckInterval>
+            <UpdateChannel>Stable</UpdateChannel>
+        </UpdateSettings>
+    </Network>
+    <!-- Plugins and Extensions -->
+    <Extensions>
+        <PluginDirectory>%PROGRAMFILES%\FileManagerPro\Plugins</PluginDirectory>
+        <EnabledPlugins>
+            <Plugin>ImagePreview.dll</Plugin>
+            <Plugin>ArchiveHandler.dll</Plugin>
+            <Plugin>PDFViewer.dll</Plugin>
+        </EnabledPlugins>
+        <AutoLoadPlugins>true</AutoLoadPlugins>
+    </Extensions>
+    <!-- Logging Configuration -->
+    <Logging>
+        <LogLevel>Information</LogLevel>
+        <LogFile>%LOCALAPPDATA%\FileManagerPro\Logs\app.log</LogFile>
+        <MaxLogSize unit="MB">10</MaxLogSize>
+        <LogRotation>Daily</LogRotation>
+        <EventLogging Enabled="true">
+            <Source>FileManagerPro</Source>
+            <LogName>Application</LogName>
+        </EventLogging>
+    </Logging>
+    <!-- Backup and Recovery -->
+    <Backup>
+        <AutoBackup Enabled="true">
+            <Interval unit="hours">6</Interval>
+            <Location>%USERPROFILE%\FileManagerProBackups</Location>
+            <MaxBackups>10</MaxBackups>
+        </AutoBackup>
+        <ConfigurationBackup Enabled="true">
+            <BackupOnExit>true</BackupOnExit>
+        </ConfigurationBackup>
+    </Backup>
+    <!-- Platform Specific Settings -->
+    <PlatformSpecific>
+        <Windows>
+            <UseNativeAPI>true</UseNativeAPI>
+            <ShellIntegration>true</ShellIntegration>
+            <RegistrySettings>
+                <RegisterFileTypes>true</RegisterFileTypes>
+                <ContextMenuEntries>true</ContextMenuEntries>
+            </RegistrySettings>
+        </Windows>
+        <Linux>
+            <UseFUSE>true</UseFUSE>
+            <DefaultPermissions>755</DefaultPermissions>
+        </Linux>
+        <Mac>
+            <UseSpotlight>true</UseSpotlight>
+            <DockIntegration>true</DockIntegration>
+        </Mac>
+    </PlatformSpecific>
+    <!-- Custom Metadata -->
+    <Metadata>
+        <ModifiedBy>System Administrator</ModifiedBy>
+        <ConfigVersion>2.0</ConfigVersion>
+    </Metadata>
+</SystemConfiguration>

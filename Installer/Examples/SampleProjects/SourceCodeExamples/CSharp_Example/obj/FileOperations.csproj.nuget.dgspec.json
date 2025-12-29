@@ -1,0 +1,107 @@
+{
+  "format": 1,
+  "restore": {
+    "/mnt/d/c/FileManagerPro/Installer/Examples/SampleProjects/SourceCodeExamples/CSharp_Example/FileOperations.csproj": {}
+  },
+  "projects": {
+    "/mnt/d/c/FileManagerPro/Installer/Examples/SampleProjects/SourceCodeExamples/CSharp_Example/FileOperations.csproj": {
+      "version": "2.1.0",
+      "restore": {
+        "projectUniqueName": "/mnt/d/c/FileManagerPro/Installer/Examples/SampleProjects/SourceCodeExamples/CSharp_Example/FileOperations.csproj",
+        "projectName": "FileManagerPro.FileOperations",
+        "projectPath": "/mnt/d/c/FileManagerPro/Installer/Examples/SampleProjects/SourceCodeExamples/CSharp_Example/FileOperations.csproj",
+        "packagesPath": "/home/artem/.nuget/packages/",
+        "outputPath": "/mnt/d/c/FileManagerPro/Installer/Examples/SampleProjects/SourceCodeExamples/CSharp_Example/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/artem/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "allWarningsAsErrors": true
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.CSharp": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
+            "Microsoft.CodeAnalysis.BannedApiAnalyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.3.4, )"
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Logging.Console": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Roslynator.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[4.11.0, )"
+            },
+            "StyleCop.Analyzers": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.2.0-beta.435, )"
+            },
+            "System.IO.Hashing": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "System.Memory": {
+              "target": "Package",
+              "version": "[4.5.5, )"
+            },
+            "System.Security.Cryptography.ProtectedData": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

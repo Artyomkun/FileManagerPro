@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FileManagerPro - Web File Manager</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="FileManagerPro - Modern web-based file management system">
+    <meta name="keywords" content="file manager, web, file system, management">
+    <meta name="author" content="FileManagerPro Team">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading File Manager...</div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- App Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fas fa-folder-tree"></i>
+                <span>FileManagerPro</span>
+                <span class="version-badge">v2.1</span>
+            </div>
+            
+            <!-- Search Box -->
+            <div class="search-box">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" 
+                           id="search-input" 
+                           placeholder="Search files and folders..." 
+                           autocomplete="off"
+                           spellcheck="false">
+                    <button id="search-clear" class="btn-icon" title="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- User Actions -->
+            <div class="user-actions">
+                <button id="btn-notifications" class="btn-icon" title="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button id="btn-help" class="btn-icon" title="Help">
+                    <i class="fas fa-question-circle"></i>
+                </button>
+                <button id="btn-settings" class="btn-icon" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff" 
+                         alt="User Avatar" 
+                         class="avatar">
+                    <span class="user-name">User</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Toolbar -->
+        <div class="toolbar">
+            <!-- Navigation Controls -->
+            <div class="toolbar-group">
+                <button id="btn-back" class="btn" title="Back">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <button id="btn-forward" class="btn" title="Forward">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <button id="btn-up" class="btn" title="Up one level">
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+                <button id="btn-refresh" class="btn" title="Refresh">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+                <button id="btn-home" class="btn" title="Home">
+                    <i class="fas fa-home"></i>
+                </button>
+            </div>
+            
+            <!-- Path Navigation -->
+            <div class="toolbar-group" style="flex: 1;">
+                <div id="breadcrumbs" class="breadcrumbs">
+                    <span class="breadcrumb current">Root</span>
+                </div>
+            </div>
+            
+            <!-- View Controls -->
+            <div class="toolbar-group">
+                <button id="btn-grid-view" class="btn active" title="Grid View">
+                    <i class="fas fa-th-large"></i>
+                </button>
+                <button id="btn-list-view" class="btn" title="List View">
+                    <i class="fas fa-list"></i>
+                </button>
+                <div class="divider"></div>
+                <select id="sort-by" class="form-control-sm" title="Sort by">
+                    <option value="name">Name</option>
+                    <option value="size">Size</option>
+                    <option value="modified">Modified</option>
+                    <option value="type">Type</option>
+                </select>
+                <button id="sort-order" class="btn" title="Sort order">
+                    <i class="fas fa-sort-amount-up"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- File Operations Toolbar -->
+        <div class="operations-toolbar">
+            <div class="toolbar-group">
+                <button id="btn-upload" class="btn btn-primary">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload</span>
+                </button>
+                <button id="btn-new-folder" class="btn">
+                    <i class="fas fa-folder-plus"></i>
+                    <span>New Folder</span>
+                </button>
+                <button id="btn-new-file" class="btn">
+                    <i class="fas fa-file-plus"></i>
+                    <span>New File</span>
+                </button>
+            </div>
+            
+            <div class="toolbar-group">
+                <button id="btn-copy" class="btn" disabled>
+                    <i class="fas fa-copy"></i>
+                    <span>Copy</span>
+                </button>
+                <button id="btn-cut" class="btn" disabled>
+                    <i class="fas fa-cut"></i>
+                    <span>Cut</span>
+                </button>
+                <button id="btn-paste" class="btn" disabled>
+                    <i class="fas fa-paste"></i>
+                    <span>Paste</span>
+                </button>
+            </div>
+            
+            <div class="toolbar-group">
+                <button id="btn-rename" class="btn" disabled>
+                    <i class="fas fa-i-cursor"></i>
+                    <span>Rename</span>
+                </button>
+                <button id="btn-delete" class="btn btn-danger" disabled>
+                    <i class="fas fa-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <button id="btn-download" class="btn" disabled>
+                    <i class="fas fa-download"></i>
+                    <span>Download</span>
+                </button>
+            </div>
+            
+            <div class="toolbar-group">
+                <button id="btn-select-all" class="btn">
+                    <i class="fas fa-check-double"></i>
+                    <span>Select All</span>
+                </button>
+                <button id="btn-clear-selection" class="btn">
+                    <i class="fas fa-times-circle"></i>
+                    <span>Clear</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- File Area Header -->
+            <div class="file-area-header">
+                <div class="header-item">
+                    <input type="checkbox" id="select-all-checkbox">
+                    <label for="select-all-checkbox" class="checkbox-label">Name</label>
+                </div>
+                <div class="header-item">Size</div>
+                <div class="header-item">Type</div>
+                <div class="header-item">Modified</div>
+                <div class="header-item">Actions</div>
+            </div>
+            
+            <!-- File Container -->
+            <div id="file-container" class="file-container">
+                <!-- Files will be loaded here dynamically -->
+                <div class="empty-state">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Welcome to FileManagerPro</h3>
+                    <p>Your files will appear here. Start by uploading files or creating folders.</p>
+                    <div class="empty-state-actions">
+                        <button id="btn-quick-upload" class="btn btn-primary">
+                            <i class="fas fa-upload"></i>
+                            Upload Files
+                        </button>
+                        <button id="btn-quick-folder" class="btn">
+                            <i class="fas fa-folder-plus"></i>
+                            Create Folder
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <i class="fas fa-hdd"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">125 GB</span>
+                        <span class="stat-label">Total Space</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-folder"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">42</span>
+                        <span class="stat-label">Folders</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-file"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">1,258</span>
+                        <span class="stat-label">Files</span>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-database"></i>
+                    <div class="stat-info">
+                        <span class="stat-value">87.5 GB</span>
+                        <span class="stat-label">Used Space</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar (Collapsible) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Quick Access</h3>
+                <button id="btn-toggle-sidebar" class="btn-icon">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+            </div>
+            
+            <div class="sidebar-content">
+                <!-- Favorites -->
+                <div class="sidebar-section">
+                    <h4><i class="fas fa-star"></i> Favorites</h4>
+                    <ul class="sidebar-menu">
+                        <li class="active">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-desktop"></i>
+                            <span>Desktop</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-download"></i>
+                            <span>Downloads</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-file"></i>
+                            <span>Documents</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-image"></i>
+                            <span>Pictures</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-music"></i>
+                            <span>Music</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-film"></i>
+                            <span>Videos</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Drives -->
+                <div class="sidebar-section">
+                    <h4><i class="fas fa-hdd"></i> Drives</h4>
+                    <ul class="sidebar-menu">
+                        <li>
+                            <i class="fas fa-hdd" style="color: #10b981;"></i>
+                            <span>Local Disk (C:)</span>
+                            <div class="drive-usage">
+                                <div class="usage-bar" style="width: 75%;"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-hdd" style="color: #3b82f6;"></i>
+                            <span>Data (D:)</span>
+                            <div class="drive-usage">
+                                <div class="usage-bar" style="width: 45%;"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-cloud" style="color: #8b5cf6;"></i>
+                            <span>Cloud Storage</span>
+                            <div class="drive-usage">
+                                <div class="usage-bar" style="width: 30%;"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Recent Files -->
+                <div class="sidebar-section">
+                    <h4><i class="fas fa-history"></i> Recent Files</h4>
+                    <ul class="recent-files">
+                        <li>
+                            <i class="fas fa-file-pdf"></i>
+                            <div class="recent-file-info">
+                                <span class="recent-file-name">Project_Report.pdf</span>
+                                <span class="recent-file-time">Today, 10:30 AM</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-file-image"></i>
+                            <div class="recent-file-info">
+                                <span class="recent-file-name">Vacation_Photo.jpg</span>
+                                <span class="recent-file-time">Yesterday, 3:45 PM</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-file-excel"></i>
+                            <div class="recent-file-info">
+                                <span class="recent-file-name">Budget_2024.xlsx</span>
+                                <span class="recent-file-time">2 days ago</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fas fa-file-video"></i>
+                            <div class="recent-file-info">
+                                <span class="recent-file-name">Presentation.mp4</span>
+                                <span class="recent-file-time">1 week ago</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Tags -->
+                <div class="sidebar-section">
+                    <h4><i class="fas fa-tags"></i> Tags</h4>
+                    <div class="tags-container">
+                        <span class="tag" style="background-color: #3b82f6;">Work</span>
+                        <span class="tag" style="background-color: #10b981;">Personal</span>
+                        <span class="tag" style="background-color: #f59e0b;">Important</span>
+                        <span class="tag" style="background-color: #8b5cf6;">Archive</span>
+                        <span class="tag" style="background-color: #ef4444;">Urgent</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Storage Indicator -->
+            <div class="storage-indicator">
+                <div class="storage-info">
+                    <span>Storage Used: 87.5 GB of 125 GB</span>
+                    <span class="storage-percent">70%</span>
+                </div>
+                <div class="storage-bar">
+                    <div class="storage-fill" style="width: 70%;"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <div id="status-bar" class="status-content">
+                <div class="status-item">
+                    <span>Selected: 0</span>
+                </div>
+                <div class="status-item">
+                    <span>Total: 0 items</span>
+                </div>
+                <div class="status-item">
+                    <span>Size: 0 B</span>
+                </div>
+            </div>
+            
+            <div class="status-actions">
+                <button id="btn-toggle-details" class="btn-icon" title="Toggle Details">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+                <button id="btn-toggle-hidden" class="btn-icon" title="Show Hidden Files">
+                    <i class="fas fa-eye-slash"></i>
+                </button>
+                <div class="divider"></div>
+                <span class="status-text" id="connection-status">
+                    <i class="fas fa-wifi"></i>
+                    Online
+                </span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Context Menu (Dynamic) -->
+    <div id="context-menu" class="context-menu" style="display: none;"></div>
+
+    <!-- JavaScript Files -->
+    <script src="script.js"></script>
+    
+    <!-- Optional: Add other JS files if needed -->
+    <!-- <script src="utils.js"></script> -->
+    <!-- <script src="file-operations.js"></script> -->
+    <!-- <script src="drag-drop.js"></script> -->
+    
+    <!-- Initialize the application -->
+    <script>
+        // Simple fallback if script.js doesn't auto-init
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('FileManagerPro Web Interface loaded');
+            
+            // Quick actions for empty state
+            document.getElementById('btn-quick-upload')?.addEventListener('click', function() {
+                FileManager?.showUploadDialog();
+            });
+            
+            document.getElementById('btn-quick-folder')?.addEventListener('click', function() {
+                FileManager?.createNewFolder();
+            });
+            
+            // Add theme toggle
+            const themeToggle = document.createElement('button');
+            themeToggle.className = 'btn-icon';
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            themeToggle.title = 'Toggle Theme';
+            themeToggle.style.marginLeft = 'auto';
+            themeToggle.style.marginRight = '10px';
+            
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                
+                // Update icon
+                const icon = this.querySelector('i');
+                icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                
+                // Save preference
+                localStorage.setItem('filemanager_theme', newTheme);
+            });
+            
+            // Add to user actions
+            const userActions = document.querySelector('.user-actions');
+            if (userActions) {
+                userActions.insertBefore(themeToggle, userActions.firstChild);
+            }
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('filemanager_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Update theme toggle icon
+            const themeIcon = themeToggle.querySelector('i');
+            themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            
+            // Add connection status detection
+            function updateConnectionStatus() {
+                const statusElement = document.getElementById('connection-status');
+                if (statusElement) {
+                    if (navigator.onLine) {
+                        statusElement.innerHTML = '<i class="fas fa-wifi"></i> Online';
+                        statusElement.style.color = '';
+                    } else {
+                        statusElement.innerHTML = '<i class="fas fa-wifi-slash"></i> Offline';
+                        statusElement.style.color = '#ef4444';
+                    }
+                }
+            }
+            
+            window.addEventListener('online', updateConnectionStatus);
+            window.addEventListener('offline', updateConnectionStatus);
+            updateConnectionStatus();
+        });
+    </script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js').then(
+                    function(registration) {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    },
+                    function(err) {
+                        console.log('ServiceWorker registration failed: ', err);
+                    }
+                );
+            });
+        }
+    </script>
+</body>
+</html>

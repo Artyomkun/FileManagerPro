@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+    <PropertyGroup>
+        <Company>FileManagerPro</Company>
+        <Copyright>Copyright © 2024</Copyright>
+        <Product>FileManagerPro</Product>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <Authors>Development Team</Authors>
+        <RepositoryUrl>https://github.com/yourusername/FileManagerPro.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+</Project>

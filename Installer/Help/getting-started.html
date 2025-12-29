@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Начало работы - File Manager Pro</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --border-color: #dee2e6;
+            --text-dark: #333;
+            --text-light: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--gradient-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-secondary);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .breadcrumb .separator {
+            color: #999;
+        }
+
+        .steps-container {
+            counter-reset: step-counter;
+        }
+
+        .step {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            position: relative;
+            border-left: 4px solid var(--secondary-color);
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .step::before {
+            counter-increment: step-counter;
+            content: "Шаг " counter(step-counter);
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .step-content {
+            margin-top: 1rem;
+        }
+
+        .step h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step h3 i {
+            color: var(--secondary-color);
+        }
+
+        .system-requirements {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .requirement-item:hover {
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .requirement-item:last-child {
+            border-bottom: none;
+        }
+
+        .requirement-status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .status-required {
+            background: var(--danger-color);
+        }
+
+        .status-recommended {
+            background: var(--warning-color);
+        }
+
+        .status-optional {
+            background: var(--secondary-color);
+        }
+
+        .status-met {
+            background: var(--success-color);
+        }
+
+        .checklist {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .checklist li {
+            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+            position: relative;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .checklist li:before {
+            content: '✓';
+            position: absolute;
+            left: 0.75rem;
+            top: 0.75rem;
+            width: 24px;
+            height: 24px;
+            background: var(--success-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .installation-types {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .installation-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid var(--border-color);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .installation-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .installation-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .installation-card.best-choice::before {
+            content: 'Рекомендуется';
+            position: absolute;
+            top: 10px;
+            right: -30px;
+            background: var(--success-color);
+            color: white;
+            padding: 5px 30px;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .command-block {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .command-block .copy-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .command-block .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .screenshot {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .screenshot img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .screenshot-caption {
+            font-style: italic;
+            color: #666;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .tip {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .warning {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .faq {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1rem;
+            background: var(--light-bg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .faq-question:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .faq-question i {
+            transition: var(--transition);
+        }
+
+        .faq-answer {
+            padding: 1rem;
+            display: none;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .next-steps {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .next-steps h3 {
+            margin-bottom: 1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: #666;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--secondary-color);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .loading {
+            animation: pulse 1.5s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .step {
+                padding: 1.5rem;
+            }
+            
+            .installation-types {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-play-circle"></i> Начало работы с File Manager Pro</h1>
+            <p>Полное руководство по установке и первому запуску</p>
+        </header>
+
+        <div class="breadcrumb">
+            <a href="index.html"><i class="fas fa-home"></i> Главная</a>
+            <span class="separator">/</span>
+            <span>Начало работы</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <div class="steps-container">
+            <div class="step" id="step1">
+                <h3><i class="fas fa-clipboard-check"></i> Проверка системных требований</h3>
+                <div class="step-content">
+                    <p>Перед установкой убедитесь, что ваша система соответствует требованиям:</p>
+                    
+                    <div class="system-requirements">
+                        <div class="requirement-item">
+                            <div class="requirement-status status-required"><i class="fas fa-exclamation"></i></div>
+                            <div>
+                                <strong>Операционная система:</strong> Windows 10 или новее (64-bit)
+                            </div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-status status-required"><i class="fas fa-microchip"></i></div>
+                            <div>
+                                <strong>Архитектура:</strong> Только x64 (64-bit)
+                            </div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-status status-required"><i class="fas fa-code"></i></div>
+                            <div>
+                                <strong>.NET Runtime:</strong> .NET 6.0 Desktop Runtime
+                            </div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-status status-required"><i class="fas fa-cogs"></i></div>
+                            <div>
+                                <strong>VC++ Redist:</strong> Visual C++ Redistributable 2015-2022
+                            </div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-status status-recommended"><i class="fas fa-memory"></i></div>
+                            <div>
+                                <strong>Оперативная память:</strong> 2 GB (рекомендуется 4 GB)
+                            </div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-status status-recommended"><i class="fas fa-hdd"></i></div>
+                            <div>
+                                <strong>Место на диске:</strong> 200 MB свободного пространства
+                            </div>
+                        </div>
+                        <div class="requirement-item">
+                            <div class="requirement-status status-optional"><i class="fas fa-tachometer-alt"></i></div>
+                            <div>
+                                <strong>Дополнительно:</strong> SSD для лучшей производительности
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="note">
+                        <strong><i class="fas fa-info-circle"></i> Примечание:</strong> 
+                        File Manager Pro использует трёхуровневую архитектуру (C/C++/C#), что требует установки всех компонентов.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" id="step2">
+                <h3><i class="fas fa-download"></i> Скачивание и подготовка</h3>
+                <div class="step-content">
+                    <p>Выберите способ установки, подходящий для вас:</p>
+                    
+                    <div class="installation-types">
+                        <div class="installation-card best-choice">
+                            <h4><i class="fas fa-user"></i> Стандартная установка</h4>
+                            <p>Рекомендуется для большинства пользователей:</p>
+                            <ol class="checklist">
+                                <li>Скачайте установщик с официального сайта</li>
+                                <li>Запустите FileManagerPro_Setup.exe</li>
+                                <li>Следуйте инструкциям мастера установки</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="installation-card">
+                            <h4><i class="fas fa-user-tie"></i> Тихая установка</h4>
+                            <p>Для системных администраторов и развёртывания:</p>
+                            <div class="command-block">
+                                FileManagerPro_Setup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+                                <button class="copy-btn" onclick="copyCommand(this)">Копировать</button>
+                            </div>
+                            <p>Дополнительные параметры:</p>
+                            <div class="command-block">
+                                /DIR="C:\Program Files\FileManagerPro" – путь установки<br>
+                                /COMPONENTS="main,explorer" – выбор компонентов<br>
+                                /LOG="install.log" – запись лога
+                            </div>
+                        </div>
+                        
+                        <div class="installation-card">
+                            <h4><i class="fas fa-code-branch"></i> Разработчикам</h4>
+                            <p>Сборка из исходного кода:</p>
+                            <div class="command-block">
+                                git clone https://github.com/example/filemanager.git<br>
+                                cd filemanager<br>
+                                .\build.bat
+                                <button class="copy-btn" onclick="copyCommand(this)">Копировать</button>
+                            </div>
+                            <p class="tip">Требуются: Git, Visual Studio 2022, .NET 6.0 SDK</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" id="step3">
+                <h3><i class="fas fa-wrench"></i> Установка компонентов</h3>
+                <div class="step-content">
+                    <p>Во время установки вам будут предложены следующие компоненты:</p>
+                    
+                    <div class="screenshot">
+                        <!-- Здесь будет скриншот мастера установки -->
+                        <div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                            <i class="fas fa-cogs" style="font-size: 3rem; color: #ccc;"></i>
+                        </div>
+                        <div class="screenshot-caption">Мастер установки File Manager Pro</div>
+                    </div>
+                    
+                    <h4>Основные компоненты:</h4>
+                    <ul class="checklist">
+                        <li><strong>Основные файлы программы:</strong> Исполняемые файлы и библиотеки</li>
+                        <li><strong>Интеграция с проводником:</strong> Контекстное меню Windows</li>
+                        <li><strong>Документация:</strong> Локальная справка и руководства</li>
+                        <li><strong>Примеры:</strong> Примеры использования и шаблоны</li>
+                    </ul>
+                    
+                    <div class="warning">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Важно!</strong>
+                        Для корректной работы требуется установить <strong>Visual C++ Redistributable</strong>. 
+                        Если он не установлен, мастер установки предложит скачать его автоматически.
+                    </div>
+                    
+                    <div class="tip">
+                        <strong><i class="fas fa-lightbulb"></i> Совет:</strong>
+                        Рекомендуется установить все компоненты для полной функциональности.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" id="step4">
+                <h3><i class="fas fa-rocket"></i> Первый запуск и настройка</h3>
+                <div class="step-content">
+                    <p>После успешной установки:</p>
+                    
+                    <div class="screenshot">
+                        <!-- Здесь будет скриншот первого запуска -->
+                        <div style="background: #f0f0f0; height: 200px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                            <i class="fas fa-play" style="font-size: 3rem; color: #ccc;"></i>
+                        </div>
+                        <div class="screenshot-caption">Окно первого запуска программы</div>
+                    </div>
+                    
+                    <h4>Начальная настройка:</h4>
+                    <ol class="checklist">
+                        <li><strong>Выберите язык интерфейса</strong> (русский/английский)</li>
+                        <li><strong>Настройте горячие клавиши</strong> под свои предпочтения</li>
+                        <li><strong>Выберите тему оформления</strong> (светлая/тёмная)</li>
+                        <li><strong>Укажите папки для быстрого доступа</strong></li>
+                        <li><strong>Настройте параметры отображения</strong> файлов</li>
+                    </ol>
+                    
+                    <div class="tip">
+                        <strong><i class="fas fa-lightbulb"></i> Быстрый старт:</strong>
+                        Нажмите <kbd>F1</kbd> в любой момент для вызова справки по текущему действию.
+                    </div>
+                </div>
+            </div>
+
+            <div class="step" id="step5">
+                <h3><i class="fas fa-check-circle"></i> Проверка установки</h3>
+                <div class="step-content">
+                    <p>Убедитесь, что всё работает корректно:</p>
+                    
+                    <div class="command-block">
+                        # Проверка установленных компонентов<br>
+                        FileManager.exe --diagnostic<br><br>
+                        # Тест C/C++ библиотек<br>
+                        FileManager.exe --test-native<br><br>
+                        # Создание отчёта о системе<br>
+                        FileManager.exe --system-report
+                        <button class="copy-btn" onclick="copyCommand(this)">Копировать</button>
+                    </div>
+                    
+                    <h4>Что должно работать:</h4>
+                    <ul class="checklist">
+                        <li>Открытие программы из меню Пуск</li>
+                        <li>Навигация по файловой системе</li>
+                        <li>Контекстное меню в проводнике</li>
+                        <li>Быстрый поиск файлов</li>
+                        <li>Операции с файлами (копирование, удаление)</li>
+                    </ul>
+                    
+                    <div class="note">
+                        <strong><i class="fas fa-stethoscope"></i> Диагностика:</strong>
+                        Если возникли проблемы, используйте команду <code>--diagnostic</code> для создания отчёта.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq">
+            <h3><i class="fas fa-question-circle"></i> Часто задаваемые вопросы</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Могу ли я установить программу на Windows 7?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Нет. File Manager Pro требует Windows 10 или новее из-за использования современных API .NET 6.0, которые не поддерживаются в Windows 7.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Почему требуются обе библиотеки: .NET и VC++?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Программа использует трёхуровневую архитектуру:
+                        <ul>
+                            <li><strong>.NET 6.0</strong> – для графического интерфейса (C#)</li>
+                            <li><strong>VC++ Redist</strong> – для логики навигации (C++)</li>
+                            <li><strong>WinAPI</strong> – для файловых операций (C)</li>
+                        </ul>
+                        Все три компонента необходимы для работы.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Как обновить программу до новой версии?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Доступно несколько способов:
+                        <ol>
+                            <li>Автоматическое обновление через встроенный механизм</li>
+                            <li>Скачивание новой версии с официального сайта</li>
+                            <li>Через параметры программы (Настройки → Обновление)</li>
+                        </ol>
+                        Старая версия будет автоматически удалена перед установкой новой.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Можно ли перенести настройки на другой компьютер?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Да. Настройки хранятся в папке:
+                        <div class="command-block">
+                            %APPDATA%\FileManagerPro\config.json
+                        </div>
+                        Скопируйте этот файл на другой компьютер для переноса настроек.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="next-steps">
+            <h3><i class="fas fa-arrow-right"></i> Что дальше?</h3>
+            <p>Теперь, когда File Manager Pro установлен, вы можете:</p>
+            
+            <div class="action-buttons">
+                <a href="features.html" class="btn btn-primary">
+                    <i class="fas fa-star"></i> Изучить возможности
+                </a>
+                <a href="navigation.html" class="btn btn-secondary">
+                    <i class="fas fa-compass"></i> Освоить навигацию
+                </a>
+                <a href="index.html" class="btn btn-secondary">
+                    <i class="fas fa-book"></i> Открыть справку
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p>File Manager Pro • Руководство по началу работы • Версия 1.0.0</p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #888;">
+                <i class="fas fa-code"></i> C/C++/C# • 
+                <i class="fas fa-shield-alt"></i> Безопасная установка • 
+                <i class="fas fa-sync-alt"></i> Последнее обновление: <span id="current-date"></span>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Обновление даты
+        document.getElementById('current-date').textContent = 
+            new Date().toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+        // Копирование команд
+        function copyCommand(button) {
+            const commandBlock = button.parentElement;
+            const text = commandBlock.textContent.replace('Копировать', '').trim();
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Скопировано!';
+                button.style.background = '#27ae60';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                }, 2000);
+            });
+        }
+
+        // Анимация прогресса
+        function updateProgress() {
+            const steps = document.querySelectorAll('.step');
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPosition = window.pageYOffset;
+            const progress = (scrollPosition / totalHeight) * 100;
+            
+            document.getElementById('progress').style.width = Math.min(100, progress) + '%';
+        }
+
+        window.addEventListener('scroll', updateProgress);
+        window.addEventListener('load', updateProgress);
+
+        // FAQ аккордеон
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Анимация появления шагов
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.step').forEach(step => {
+            step.style.opacity = '0';
+            step.style.transform = 'translateY(20px)';
+            step.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(step);
+        });
+
+        // Автоматическое раскрытие текущего шага при прокрутке
+        function highlightCurrentStep() {
+            const steps = document.querySelectorAll('.step');
+            let currentStep = null;
+            
+            steps.forEach(step => {
+                const rect = step.getBoundingClientRect();
+                if(rect.top <= 100 && rect.bottom >= 100) {
+                    currentStep = step;
+                }
+            });
+            
+            // Убираем подсветку у всех
+            steps.forEach(step => step.classList.remove('active-step'));
+            
+            // Добавляем текущему
+            if(currentStep) {
+                currentStep.classList.add('active-step');
+            }
+        }
+
+        window.addEventListener('scroll', highlightCurrentStep);
+        window.addEventListener('load', highlightCurrentStep);
+
+        // Добавляем стиль для активного шага
+        const style = document.createElement('style');
+        style.textContent = `
+            .active-step {
+                border-left-color: #27ae60 !important;
+                background: linear-gradient(to right, rgba(39, 174, 96, 0.05), transparent) !important;
+            }
+            .active-step::before {
+                background: #27ae60 !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Симуляция проверки требований
+        function simulateRequirementCheck() {
+            const requirements = document.querySelectorAll('.requirement-item');
+            
+            requirements.forEach((req, index) => {
+                setTimeout(() => {
+                    const status = req.querySelector('.requirement-status');
+                    status.classList.remove('status-required', 'status-recommended', 'status-optional');
+                    status.classList.add('status-met');
+                    status.innerHTML = '<i class="fas fa-check"></i>';
+                    
+                    // Добавляем анимацию
+                    status.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        status.style.transform = 'scale(1)';
+                    }, 300);
+                }, index * 500);
+            });
+        }
+
+        // Запускаем при загрузке первого шага
+        const step1 = document.getElementById('step1');
+        const stepObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    setTimeout(simulateRequirementCheck, 1000);
+                    stepObserver.disconnect(); // Отключаем после первого срабатывания
+                }
+            });
+        }, { threshold: 0.5 });
+
+        stepObserver.observe(step1);
+    </script>
+</body>
+</html>

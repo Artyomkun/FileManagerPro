@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AssemblyName>FileManagerPro.CSharpDemo</AssemblyName>
+        <RootNamespace>FileManagerPro.Examples.CSharpProject</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Настройки для File Manager Pro -->
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>1591</NoWarn> <!-- Подавление предупреждений о отсутствии документации -->
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Ссылки на сборки .NET -->
+        <PackageReference Include="System.Text.Json" Version="6.0.0" />
+    </ItemGroup>
+
+</Project>

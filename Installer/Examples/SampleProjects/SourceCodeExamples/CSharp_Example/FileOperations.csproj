@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!-- Basic Project Information -->
+        <TargetFramework>net8.0</TargetFramework>
+        <OutputType>Library</OutputType>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        
+        <!-- Assembly Information -->
+        <AssemblyName>FileManagerPro.FileOperations</AssemblyName>
+        <RootNamespace>FileManagerPro.FileSystem</RootNamespace>
+        <AssemblyTitle>FileManagerPro File Operations Library</AssemblyTitle>
+        <Product>FileManagerPro</Product>
+        <Company>Your Company</Company>
+        <Copyright>Copyright © 2024</Copyright>
+        <Version>2.1.0</Version>
+        <FileVersion>2.1.0.0</FileVersion>
+        <AssemblyVersion>2.1.0.0</AssemblyVersion>
+        <InformationalVersion>2.1.0-alpha</InformationalVersion>
+        <PackageId>FileManagerPro.FileOperations</PackageId>
+        
+        <!-- Build Configuration -->
+        <Configurations>Debug;Release;Testing</Configurations>
+        <Platforms>AnyCPU;x64;x86</Platforms>
+        
+        <!-- Output Settings -->
+        <OutputPath>bin\$(Configuration)\$(Platform)\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        
+        <!-- Documentation -->
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DocumentationFile>bin\$(Configuration)\$(Platform)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+        
+        <!-- Optimization -->
+        <Optimize Condition="'$(Configuration)' == 'Release'">true</Optimize>
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        
+        <!-- Warnings and Errors -->
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningsAsErrors>CS8600;CS8602;CS8603</WarningsAsErrors>
+        <WarningLevel>4</WarningLevel>
+        <NoWarn>1591;1701;1702</NoWarn> <!-- Ignore missing XML doc warnings -->
+        
+        <!-- Code Analysis -->
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        
+        <!-- Package Settings (if creating NuGet package) -->
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>file;filesystem;operations;manager;utility</PackageTags>
+        <PackageDescription>Advanced file operations library for FileManagerPro with async support, progress reporting, and error handling.</PackageDescription>
+        <PackageProjectUrl>https://github.com/yourusername/FileManagerPro</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/yourusername/FileManagerPro.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        
+        <!-- Target Specific -->
+        <UseWindowsForms Condition="'$(TargetFramework)' == 'net8.0-windows'">true</UseWindowsForms>
+        <UseWPF Condition="'$(TargetFramework)' == 'net8.0-windows'">true</UseWPF>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Optimize>false</Optimize>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+        <PlatformTarget>x86</PlatformTarget>
+        <DefineConstants>DEBUG;TRACE;X86</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+        <PlatformTarget>x64</PlatformTarget>
+        <DefineConstants>DEBUG;TRACE;X64</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+        <PlatformTarget>x86</PlatformTarget>
+        <DefineConstants>TRACE;X86</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+        <PlatformTarget>x64</PlatformTarget>
+        <DefineConstants>TRACE;X64</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Testing|AnyCPU'">
+        <DefineConstants>TRACE;TESTING</DefineConstants>
+        <Optimize>false</Optimize>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- Main Source Files -->
+        <Compile Include="FileOperations.cs" />
+        <Compile Include="FileOperationsUtils.cs" />
+        <Compile Include="FileSystemWatcherEx.cs" />
+        <Compile Include="FileComparer.cs" />
+        <Compile Include="DirectoryScanner.cs" />
+        <Compile Include="FileEncryptor.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Package References -->
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+        <PackageReference Include="System.IO.Hashing" Version="8.0.0" />
+        <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+        <PackageReference Include="System.Text.Json" Version="8.0.0" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="System.Memory" Version="4.5.5" />
+        
+        <!-- Testing Dependencies (only for Testing configuration) -->
+        <PackageReference Include="xunit" Version="2.6.3" Condition="'$(Configuration)' == 'Testing'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.5" Condition="'$(Configuration)' == 'Testing'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Moq" Version="4.20.70" Condition="'$(Configuration)' == 'Testing'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" Condition="'$(Configuration)' == 'Testing'">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Project References -->
+        <!-- Uncomment if you have other projects in solution -->
+        <!--
+        <ProjectReference Include="..\FileManagerPro.Core\FileManagerPro.Core.csproj" />
+        <ProjectReference Include="..\FileManagerPro.Common\FileManagerPro.Common.csproj" />
+        -->
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Embedded Resources -->
+        <EmbeddedResource Include="Resources\Icons\file_icon.png" />
+        <EmbeddedResource Include="Resources\Icons\folder_icon.png" />
+        <EmbeddedResource Include="Resources\License.txt" />
+        <None Include="..\..\..\..\icon.png" Link="icon.png">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+        </None>
+        <None Include="README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Content Files -->
+        <Content Include="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="config\log4net.config" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Analyzers -->
+        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Roslynator.Analyzers" Version="4.11.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.BannedApiAnalyzers" Version="3.3.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <!-- Build Events -->
+    <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+        <Message Text="Building FileOperations library..." Importance="high" />
+    </Target>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+        <Message Text="Build completed: $(TargetPath)" Importance="high" />
+        <!-- Copy to common output directory -->
+        <Copy SourceFiles="$(TargetPath)" 
+            DestinationFiles="..\..\..\..\Bin\$(Configuration)\$(AssemblyName).dll" 
+            SkipUnchangedFiles="true" />
+    </Target>
+
+    <!-- Custom Properties -->
+    <PropertyGroup>
+        <Authors>Your Team</Authors>
+        <PackageReleaseNotes>Initial release of FileOperations library for FileManagerPro.</PackageReleaseNotes>
+        <RepositoryBranch>main</RepositoryBranch>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+    <!-- Conditional Imports -->
+    <Import Project="..\..\..\..\Directory.Build.props" Condition="Exists('..\..\..\..\Directory.Build.props')" />
+    <Import Project="..\..\..\..\Directory.Build.targets" Condition="Exists('..\..\..\..\Directory.Build.targets')" />
+
+    <!-- StyleCop Settings -->
+    <PropertyGroup>
+        <CodeAnalysisRuleSet>..\..\..\..\StyleCop.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <AdditionalFiles Include="..\..\..\..\stylecop.json" Link="stylecop.json" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,49 @@
+services:
+  filemanager:
+    build:
+      context: ..
+      dockerfile: Installer/Dockerfile
+    container_name: filemanager-app
+    ports:
+      - "6000:6000" 
+    volumes: 
+      - /mnt/d:/mnt/d:rw
+      - ./data:/app/data:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix 
+    environment:
+      - SSH_PASSWORD=${SSH_PASSWORD}  
+      - DISPLAY=${DISPLAY}
+    networks:
+      - app-network 
+    user: "1000:1000"
+    stdin_open: true  
+    tty: true  
+    entrypoint: ["/app/publish/entrypoint.sh"]
+
+  n8n-api:
+    image: n8nio/n8n:latest
+    container_name: n8n-filemanager
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_PROTOCOL=http
+      - N8N_HOST=0.0.0.0
+      - N8N_PORT=5678
+      - N8N_WEBHOOK_URL=http://localhost:5678/
+      - WEBHOOK_URL=http://localhost:5678/
+      - N8N_METRICS=false
+      - GENERIC_TIMEZONE=Europe/Moscow
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - n8n_data:/home/node/.n8n
+      - ./n8n-local:/files
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  n8n_data:
+    driver: local    

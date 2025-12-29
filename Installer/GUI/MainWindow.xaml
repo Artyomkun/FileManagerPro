@@ -1,0 +1,808 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileManager"  
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+        x:Class="FileManager.MainWindow"
+        Title="FileManager" 
+        MinWidth="800" MinHeight="600"
+        x:DataType="local:MainWindow">
+
+    <Window.Resources>
+        <local:ObjectToBoolConverter x:Key="ObjectToBoolConverter"/>
+        <local:InverseBoolConverter x:Key="InverseBoolConverter"/>
+        <local:IsNullConverter x:Key="IsNullConverter"/>
+        <local:DateFormatConverter x:Key="DateFormatConverter"/>
+        <local:FileSizeConverter x:Key="FileSizeConverter"/>
+        <local:FileIconConverter x:Key="FileIconConverter"/>
+
+        <!-- Стиль для прозрачных кнопок -->
+        <Style x:Key="TransparentButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- Контекстное меню для файлов/папок -->
+        <ContextMenu x:Key="FileContextMenu">
+            <MenuItem Header="Открыть" Click="OnOpenClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="📂" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Открыть с помощью..." Click="OnOpenLocationClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="🔧" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Вырезать" Click="OnCutClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="✂️" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Копировать" Click="OnCopyClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="📋" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Вставить" Click="OnPasteClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="📎" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Копировать путь" Click="OnCopyPathClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="📍" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Создать">
+                <MenuItem.Icon>
+                    <TextBlock Text="➕" FontSize="14"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Папку" Click="OnNewFolderClick">
+                    <MenuItem.Icon>
+                        <TextBlock Text="📁" FontSize="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Текстовый документ" Click="OnNewTextFileClick">
+                    <MenuItem.Icon>
+                        <TextBlock Text="📄" FontSize="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Ярлык">
+                    <MenuItem.Icon>
+                        <TextBlock Text="🔗" FontSize="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Удалить" Click="OnDeleteClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="🗑️" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Переименовать" Click="OnRenameClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="✏️" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Свойства" Click="OnPropertiesClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="⚙️" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <ContextMenu x:Key="DriveContextMenu">
+            <MenuItem Header="Открыть">
+                <MenuItem.Icon>
+                    <TextBlock Text="📂" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Свойства">
+                <MenuItem.Icon>
+                    <TextBlock Text="⚙️" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Форматировать...">
+                <MenuItem.Icon>
+                    <TextBlock Text="🔄" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <ContextMenu x:Key="EmptySpaceContextMenu">
+            <MenuItem Header="Вставить" Click="OnPasteClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="📎" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Создать">
+                <MenuItem.Icon>
+                    <TextBlock Text="➕" FontSize="14"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Папку" Click="OnNewFolderClick">
+                    <MenuItem.Icon>
+                        <TextBlock Text="📁" FontSize="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Текстовый документ" Click="OnNewTextFileClick">
+                    <MenuItem.Icon>
+                        <TextBlock Text="📄" FontSize="14"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Вид">
+                <MenuItem Header="Крупные значки" Click="OnViewLargeIconsClick"/>
+                <MenuItem Header="Мелкие значки"/>
+                <MenuItem Header="Список"/>
+                <MenuItem Header="Таблица" Click="OnViewDetailsClick"/>
+                <Separator/>
+                <MenuItem Header="Сортировка">
+                    <MenuItem Header="По имени"/>
+                    <MenuItem Header="По типу"/>
+                    <MenuItem Header="По размеру"/>
+                    <MenuItem Header="По дате изменения"/>
+                </MenuItem>
+                <MenuItem Header="Обновить" Click="OnRefreshClick"/>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="Свойства" Click="OnPropertiesClick">
+                <MenuItem.Icon>
+                    <TextBlock Text="⚙️" FontSize="14"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>    
+    
+    <Window.Styles>
+        <Style Selector="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
+        </Style>
+        <!-- Стиль для TabControl ленты -->
+        <Style Selector="TabControl.ribbon-tab-control">
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+
+        <Style Selector="TabControl.ribbon-tab-control /template/ TabStrip">
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+        
+        <Style Selector="Button.transparent">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <Style Selector="Button.transparent:pointerover">
+            <Setter Property="Background" Value="#E5F3FF"/>
+            <Setter Property="BorderBrush" Value="#CCE5FF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+    
+        <Style Selector="TreeViewItem">
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <!-- Стили для контекстного меню -->
+        <Style Selector="MenuItem">
+            <Setter Property="Padding" Value="10,8,20,8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="MinWidth" Value="180"/>
+        </Style>
+
+        <Style Selector="MenuItem:pointerover">
+            <Setter Property="Background" Value="#E5F3FF"/>
+        </Style>
+
+        <!-- Стили для кнопок в ленте -->
+        <Style Selector="Button.ribbon-button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+
+        <Style Selector="Button.ribbon-button:pointerover">
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Стили для кнопок навигации -->
+        <Style Selector="Button#BackButton, Button#ForwardButton, Button#UpButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <Style Selector="Button#BackButton:pointerover, Button#ForwardButton:pointerover, Button#UpButton:pointerover">
+            <Setter Property="Background" Value="#F0F0F0"/>
+        </Style>
+
+        <!-- Стили для кнопок управления -->
+        <Style Selector="Button#RefreshButton, Button#ViewDetailsButton, Button#ViewLargeIconsButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="4,0,2,0"/>
+        </Style>
+
+        <Style Selector="Button#RefreshButton:pointerover, Button#ViewDetailsButton:pointerover, Button#ViewLargeIconsButton:pointerover">
+            <Setter Property="Background" Value="#F0F0F0"/>
+        </Style>
+
+        <!-- Стили для вкладок ленты -->
+        <Style Selector="TabItem.ribbon-tab">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#000000"/>
+        </Style>
+
+        <Style Selector="TabItem.ribbon-tab:selected">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E5E5E5"/>
+            <Setter Property="BorderThickness" Value="1,1,1,0"/>
+        </Style>
+
+        <!-- Стили для DataGrid -->
+        <Style Selector="DataGridRow">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height" Value="32"/>
+        </Style>
+        
+        <Style Selector="DataGridRow:selected">
+            <Setter Property="Background" Value="#E5F3FF"/>
+            <Setter Property="BorderBrush" Value="#CCE5FF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        
+        <Style Selector="DataGridRow:pointerover">
+            <Setter Property="Background" Value="#F5F9FF"/>
+        </Style>
+    </Window.Styles>
+    
+    <Design.DataContext>
+        <local:MainWindow />
+    </Design.DataContext>
+    
+    <DockPanel Background="White">
+        
+        <!-- Лента проводника Windows (Ribbon) -->
+        <Border DockPanel.Dock="Top" Background="White" 
+                BorderThickness="0,0,0,1" BorderBrush="#D1D1D1"
+                x:Name="RibbonPanel">
+            
+            <StackPanel>
+                <!-- 1. Заголовки вкладок -->
+                <Border Background="#F0F0F0" 
+                        BorderBrush="#D1D1D1" BorderThickness="0,0,0,1"
+                        Height="40">
+                    <TabControl x:Name="RibbonTabControl"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Margin="0" 
+                                Padding="0"
+                                SelectedIndex="0"
+                                TabStripPlacement="Top"
+                                Classes="ribbon-tab-control"
+                                SelectionChanged="OnRibbonTabChanged">
+                        
+                        <TabItem Header="Главная" Classes="ribbon-tab"/>
+                        <TabItem Header="Вид" Classes="ribbon-tab"/>
+                        <TabItem Header="Поделиться" Classes="ribbon-tab"/>
+                    </TabControl>
+                </Border>
+
+                <!-- 2. Контейнер для содержимого выбранной вкладки -->
+                <ContentControl x:Name="RibbonContentControl" 
+                                Height="90" 
+                                Background="Transparent"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Панель инструментов (Address Bar) -->
+        <Border DockPanel.Dock="Top" Height="36" Background="#FFFFFF" 
+                BorderThickness="0,0,0,1" BorderBrush="#D1D1D1">
+            <Grid Margin="8,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Кнопки навигации -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Button x:Name="BackButton" Click="OnBackClick" ToolTip.Tip="Назад">
+                        <Path Data="M8,4 L2,10 L8,16" Stroke="#333" StrokeThickness="1.5" Fill="Transparent" Stretch="Uniform" Width="12" Height="12"/>
+                    </Button>
+                    <Button x:Name="ForwardButton" Click="OnForwardClick" ToolTip.Tip="Вперед">
+                        <Path Data="M2,4 L8,10 L2,16" Stroke="#333" StrokeThickness="1.5" Fill="Transparent" Stretch="Uniform" Width="12" Height="12"/>
+                    </Button>
+                    <Button x:Name="UpButton" Click="OnUpClick" ToolTip.Tip="Вверх">
+                        <Path Data="M1,9 L7,3 L13,9 M7,3 L7,14" Stroke="#333" StrokeThickness="1.5" Fill="Transparent" Stretch="Uniform" Width="14" Height="14"/>
+                    </Button>
+                </StackPanel>
+
+                <!-- Адресная строка -->
+                <Border Grid.Column="1" Margin="10,4,10,4" 
+                        BorderBrush="#D9D9D9" BorderThickness="1" 
+                        Background="White" CornerRadius="3">
+                    <TextBox x:Name="AddressTextBox" 
+                             Text="{Binding CurrentPath}" 
+                             BorderThickness="0" 
+                             Background="Transparent"
+                             Padding="8,0" 
+                             FontSize="12"
+                             Foreground="#000000"
+                             KeyDown="OnAddressKeyDown"/>
+                </Border>
+
+                <!-- Кнопки управления видом и поиск -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <!-- Обновить -->
+                    <Button x:Name="RefreshButton" Click="OnRefreshClick" ToolTip.Tip="Обновить">
+                        <Path Data="M1,1 A10,10 0 1,0 19,19 M19,1 L19,9 L11,9" Stroke="#333" StrokeThickness="1.5" Fill="Transparent" Stretch="Uniform"/>
+                    </Button>
+
+                    <Separator Width="1" Height="20" Margin="5,0" Background="#D1D1D1"/>
+
+                    <!-- Вид: Таблица (Список) -->
+                    <Button x:Name="ViewDetailsButton" Click="OnViewDetailsClick" ToolTip.Tip="Таблица">
+                        <!-- Иконка списка -->
+                        <Path Data="M2,2 L14,2 L14,14 L2,14 Z M5,5 L11,5 M5,8 L11,8 M5,11 L11,11" 
+                              Stroke="#333" StrokeThickness="1.2" Fill="Transparent" Stretch="Uniform"/>
+                    </Button>
+                    
+                    <!-- Вид: Значки (Сетка) -->
+                    <Button x:Name="ViewLargeIconsButton" Click="OnViewLargeIconsClick" ToolTip.Tip="Крупные значки">
+                        <!-- Иконка сетки -->
+                        <Path Data="M1,1 L6,1 L6,6 L1,6 Z M8,1 L13,1 L13,6 L8,6 Z M1,8 L6,8 L6,13 L1,13 Z M8,8 L13,8 L13,13 L8,13 Z" 
+                              Stroke="#333" StrokeThickness="1.2" Fill="Transparent" Stretch="Uniform"/>
+                    </Button>
+
+                    <Separator Width="1" Height="20" Margin="5,0" Background="#D1D1D1"/>
+
+                    <!-- Поиск -->
+                    <Border Width="200" Height="24" 
+                            BorderBrush="#D9D9D9" BorderThickness="1" 
+                            Background="White" CornerRadius="3" VerticalAlignment="Center">
+                        <Grid>
+                            <TextBlock Text="Поиск..." FontSize="12" Foreground="Gray" 
+                                       Margin="8,0,0,0" VerticalAlignment="Center" IsHitTestVisible="False"/>
+                            <TextBox x:Name="SearchTextBox" 
+                                     Text="" 
+                                     BorderThickness="0" Background="Transparent"
+                                     Foreground="#000000"
+                                     Padding="8,0,5,0" FontSize="12"
+                                     GotFocus="OnSearchGotFocus"
+                                     LostFocus="OnSearchLostFocus"
+                                     KeyDown="OnSearchKeyDown"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+        
+        <!-- Основное содержимое -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Левая панель (навигация) -->
+            <Border Grid.Column="0" BorderThickness="0,0,1,0" 
+                    BorderBrush="#E5E5E5" Background="White">
+                <ScrollViewer>
+                    <StackPanel Margin="0,10">
+                        <!-- Быстрый доступ -->
+                        <StackPanel Margin="10,0,10,10">
+                            <TextBlock Text="Быстрый доступ" 
+                                       FontSize="11" FontWeight="Bold"
+                                       Margin="0,0,0,5"
+                                       Foreground="#444444"/>
+                            
+                            <Button x:Name="QuickAccessButton" 
+                                    Classes="transparent"
+                                    Click="OnQuickAccessClick">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📌" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Загрузки" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="transparent"
+                                    Click="OnDocumentsClick">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📄" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Документы" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="transparent"
+                                    Click="OnDesktopClick">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🖥️" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Рабочий стол" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            
+                            <Button Classes="transparent"
+                                    Click="OnRecentFilesClick">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🕐" Margin="0,0,8,0"/>
+                                    <TextBlock Text="Недавние" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        
+                        <!-- Сетевые диски -->
+                        <Border Height="1" Background="#E5E5E5" Margin="10,0"/>
+                        
+                        <StackPanel Margin="10,10">
+                            <TextBlock Text="Сеть" 
+                                       FontSize="11" FontWeight="Bold"
+                                       Margin="0,0,0,5"
+                                       Foreground="#444444"/>
+                            
+                            <Button Classes="transparent"
+                                    Click="OnNetworkDriveClick">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="🌐" Margin="0,0,8,0"/>
+                                    <TextBlock Text="wb-tariffs-servers" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                        
+                        <Border Height="1" Background="#E5E5E5" Margin="10,0"/>
+                        
+                        <!-- Этот компьютер -->
+                        <StackPanel Margin="10,10">
+                            <TextBlock Text="Этот компьютер" 
+                                       FontSize="11" FontWeight="Bold"
+                                       Margin="0,0,0,5"
+                                       Foreground="#444444"/>
+                            
+                            <!-- Папки пользователя -->
+                            <StackPanel Margin="0,0,0,10">
+                                <TextBlock Text="Папки" 
+                                           FontSize="10" 
+                                           Margin="0,0,0,3"
+                                           Foreground="#666666"/>
+                                
+                                <Button Classes="transparent"
+                                        Click="OnVideosClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="🎬" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Видео" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Classes="transparent"
+                                        Click="OnDownloadsClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="⬇️" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Загрузки" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Classes="transparent"
+                                        Click="OnMusicClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="🎵" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Музыка" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Classes="transparent"
+                                        Click="OnDocumentsClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="📄" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Документы" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Classes="transparent"
+                                        Click="OnPicturesClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="🖼️" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Изображения" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button Classes="transparent"
+                                        Click="OnDesktopClick">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="🖥️" Margin="0,0,8,0"/>
+                                        <TextBlock Text="Рабочий стол" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                            
+                            <!-- Жесткие диски -->
+                            <StackPanel>
+                                <TextBlock Text="Жесткие диски (2)" 
+                                           FontSize="10" 
+                                           Margin="0,0,0,3"
+                                           Foreground="#666666"/>
+                                
+                                <Button x:Name="CDriveButton" 
+                                        Classes="transparent"
+                                        Click="OnCDriveClick"
+                                        ContextMenu="{StaticResource DriveContextMenu}"
+                                        Tag="C:">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="💽" Margin="0,0,8,0"/>
+                                        <StackPanel>
+                                            <TextBlock Text="Windows 10 (C:)" 
+                                                        VerticalAlignment="Center"/>
+                                            <TextBlock x:Name="CDriveInfoTextBlock" 
+                                                        Text="" 
+                                                        FontSize="9" 
+                                                        Foreground="Gray"
+                                                        TextTrimming="CharacterEllipsis"
+                                                        TextWrapping="NoWrap"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Button>
+                                
+                                <Button x:Name="DDriveButton" 
+                                        Classes="transparent"
+                                        Click="OnDDriveClick"
+                                        ContextMenu="{StaticResource DriveContextMenu}"
+                                        Tag="D:">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="💽" Margin="0,0,8,0"/>
+                                        <StackPanel>
+                                            <TextBlock Text="Новый том (D:)" 
+                                                        VerticalAlignment="Center"/>
+                                            <TextBlock x:Name="DDriveInfoTextBlock" 
+                                                        Text="" 
+                                                        FontSize="9" 
+                                                        Foreground="Gray"
+                                                        TextTrimming="CharacterEllipsis"
+                                                        TextWrapping="NoWrap"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+            
+            <!-- Центральная панель (файлы) с контекстным меню -->
+            <Border Grid.Column="1" BorderThickness="0,0,1,0" 
+                    BorderBrush="#E5E5E5" Background="White"
+                    ContextMenu="{StaticResource EmptySpaceContextMenu}">
+                <Grid>
+                    <!-- Заголовок текущей папки -->
+                    <Border DockPanel.Dock="Top" Height="40" 
+                            Background="#F8F8F8" BorderThickness="0,0,0,1"
+                            BorderBrush="#E5E5E5">
+                        <TextBlock x:Name="CurrentFolderText" 
+                                Text="Этот компьютер"
+                                VerticalAlignment="Center"
+                                Margin="15,0"
+                                FontSize="12" FontWeight="SemiBold"/>
+                    </Border>
+                    
+                    <Grid Margin="0,40,0,0">
+                        <!-- DataGrid для табличного вида -->
+                        <DataGrid x:Name="FilesDataGrid" 
+                                    ItemsSource="{Binding DriveItems}" 
+                                    SelectedItem="{Binding SelectedDrive, Mode=TwoWay}"
+                                    AutoGenerateColumns="False" 
+                                    GridLinesVisibility="None"
+                                    Background="White" 
+                                    IsVisible="{Binding IsDetailsView}"
+                                    FontSize="12" BorderThickness="0"
+                                    SelectionMode="Single"
+                                    DoubleTapped="OnDriveDoubleTapped"
+                                    ContextMenu="{StaticResource DriveContextMenu}">
+                            
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Имя" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="💽" 
+                                                        Margin="0,0,8,0"/>
+                                                <TextBlock Text="{Binding Name}" 
+                                                        TextTrimming="CharacterEllipsis"
+                                                        VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                                <DataGridTextColumn Header="Тип" Width="140" 
+                                                    Binding="{Binding Type}"/>
+                                
+                                <DataGridTextColumn Header="Всего места" Width="120" 
+                                                    Binding="{Binding TotalSize, Converter={StaticResource FileSizeConverter}}"/>
+                                
+                                <DataGridTextColumn Header="Свободно" Width="120" 
+                                                    Binding="{Binding FreeSpace, Converter={StaticResource FileSizeConverter}}"/>
+                                
+                                <DataGridTextColumn Header="Файловая система" Width="120" 
+                                                    Binding="{Binding DriveFormat}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        
+                        <!-- Grid для вида крупными значками -->
+                        <ScrollViewer x:Name="DrivesIconsScrollViewer"
+                                    IsVisible="{Binding IsIconsView}">
+                            <ItemsControl x:Name="DrivesIconsControl" 
+                                        ItemsSource="{Binding DriveItems}"
+                                        Margin="20,20">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="120" Height="140" 
+                                                Classes="card" 
+                                                Margin="10" 
+                                                Padding="10"
+                                                Background="Transparent"
+                                                CornerRadius="5"
+                                                Cursor="Hand"
+                                                DoubleTapped="OnDriveDoubleTapped"
+                                                ContextMenu="{StaticResource DriveContextMenu}"
+                                                IsVisible="{Binding IsVisible}"> 
+                                            <Border.Styles>
+                                                <Style Selector="Border:pointerover">
+                                                    <Setter Property="Background" Value="#F5F9FF"/>
+                                                    <Setter Property="BorderBrush" Value="#CCE5FF"/>
+                                                    <Setter Property="BorderThickness" Value="1"/>
+                                                </Style>
+                                            </Border.Styles>
+                                            <StackPanel>
+                                                <TextBlock Text="💽" 
+                                                        FontSize="32" 
+                                                        HorizontalAlignment="Center"
+                                                        Margin="0,0,0,5"/>
+                                                <TextBlock Text="{Binding Name}" 
+                                                        TextWrapping="Wrap"
+                                                        TextAlignment="Center"
+                                                        MaxWidth="100"
+                                                        Margin="0,0,0,5"
+                                                        FontSize="11"
+                                                        FontWeight="SemiBold"/>
+                                                <ProgressBar Value="{Binding UsagePercentage}" 
+                                                            Maximum="100"
+                                                            Height="8"
+                                                            Margin="10,5"
+                                                            Background="#E0E0E0"
+                                                            Foreground="#0078D7"/>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding FreeSpace, Converter={StaticResource FileSizeConverter}}" 
+                                                            FontSize="9"
+                                                            Foreground="Green"
+                                                            HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="из {Binding TotalSize, Converter={StaticResource FileSizeConverter}}" 
+                                                            FontSize="9"
+                                                            Foreground="Gray"
+                                                            HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </Border>
+            
+            <!-- Правая панель (предпросмотр) -->
+            <Border Grid.Column="2" Background="#F0F0F0" BorderThickness="1,0,0,0" BorderBrush="#E5E5E5">
+                <Grid Background="#F0F0F0">
+                    <!-- Заголовок предпросмотра -->
+                    <Border Height="40" Background="#F0F0F0" BorderThickness="0,0,0,1" BorderBrush="#E5E5E5">
+                        <TextBlock Text="Предпросмотр" 
+                                FontSize="13" FontWeight="Bold"
+                                VerticalAlignment="Center"
+                                Margin="15,0"/>
+                    </Border>
+                    
+                    <!-- Основная область -->
+                    <Grid Margin="0,40,0,0" Background="#F0F0F0">
+                        
+                        <!-- 1. ПРЕДПРОСМОТР ФАЙЛА  -->
+                        <Border x:Name="FilePreviewBorder" 
+                                Background="White"
+                                Margin="10"
+                                CornerRadius="4"
+                                BorderBrush="#E5E5E5"
+                                BorderThickness="1"
+                                IsVisible="{Binding ShowFilePreview}">
+                            <ScrollViewer>
+                                <StackPanel Margin="15" Spacing="10">
+                                    <!-- Миниатюра/иконка файла -->
+                                    <Border Background="White" 
+                                            HorizontalAlignment="Center"
+                                            Margin="0,10">
+                                        <ContentControl x:Name="PreviewContentControl"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <!-- Информация о файле -->
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Text="{Binding SelectedItem.Name}" 
+                                                FontSize="14" FontWeight="SemiBold"
+                                                TextWrapping="Wrap"
+                                                MaxWidth="250"
+                                                TextAlignment="Center"/>
+                                        
+                                        <TextBlock Text="{Binding SelectedItem.Type}" 
+                                                FontSize="12" 
+                                                Foreground="#666666"
+                                                TextAlignment="Center"/>
+                                        
+                                        <TextBlock Text="{Binding SelectedItem.SizeDisplay}" 
+                                                FontSize="12" 
+                                                Foreground="#666666"
+                                                TextAlignment="Center"/>
+                                    </StackPanel>
+
+                                    <!-- Быстрые действия (только для файлов) -->
+                                    <StackPanel Margin="0,15,0,0" Spacing="5">
+                                        <Button Content="Открыть" 
+                                                Click="OnOpenClick"
+                                                Padding="8,4"
+                                                FontSize="11"
+                                                HorizontalAlignment="Stretch"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

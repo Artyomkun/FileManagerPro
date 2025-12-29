@@ -1,0 +1,48 @@
+{
+    "application": {
+        "name": "File Manager Pro Demo Config",
+        "version": "1.0.0",
+        "description": "Пример конфигурационного файла JSON"
+    },
+    
+    "features": {
+        "enabled": true,
+        "autoSave": true,
+        "backupOnExit": false,
+        "maxHistoryItems": 100
+    },
+    
+    "appearance": {
+        "theme": "dark",
+        "fontSize": 14,
+        "showHiddenFiles": false,
+        "gridView": true
+    },
+    
+    "shortcuts": {
+        "copy": "Ctrl+C",
+        "paste": "Ctrl+V",
+        "delete": "Delete",
+        "search": "Ctrl+F",
+        "newFolder": "Ctrl+Shift+N"
+    },
+    
+    "paths": {
+        "defaultDirectory": "C:\\Users\\Demo",
+        "backupPath": "D:\\Backups",
+        "tempPath": "C:\\Temp\\FileManager"
+    },
+    
+    "performance": {
+        "cacheEnabled": true,
+        "cacheSizeMB": 100,
+        "maxThreads": 4,
+        "preloadDirectories": true
+    },
+    
+    "metadata": {
+        "created": "2024-01-15T10:30:00Z",
+        "modified": "2024-01-15T10:30:00Z",
+        "author": "File Manager Pro"
+    }
+}

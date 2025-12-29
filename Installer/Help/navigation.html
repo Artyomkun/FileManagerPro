@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Навигация - File Manager Pro</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --border-color: #dee2e6;
+            --text-dark: #333;
+            --text-light: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-navigation: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--gradient-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+            box-shadow: var(--shadow);
+        }
+
+        header {
+            background: var(--gradient-navigation);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🗂️';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .interface-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .interface-section {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .interface-section:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .interface-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .interface-element {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            transition: var(--transition);
+            cursor: help;
+            position: relative;
+        }
+
+        .interface-element:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateX(5px);
+        }
+
+        .interface-element:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            margin-left: 10px;
+            z-index: 100;
+        }
+
+        .element-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .navigation-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .method-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .method-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .method-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .method-card .badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--success-color);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .keyboard-shortcut {
+            display: inline-block;
+            background: var(--dark-bg);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 0.25rem;
+            font-size: 0.9rem;
+        }
+
+        .visual-guide {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .file-explorer-mockup {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .mockup-toolbar {
+            background: var(--primary-color);
+            color: white;
+            padding: 0.75rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .mockup-toolbar-button {
+            background: rgba(255,255,255,0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .mockup-toolbar-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .mockup-content {
+            display: flex;
+            height: 300px;
+        }
+
+        .mockup-sidebar {
+            width: 200px;
+            background: #f8f9fa;
+            border-right: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        .mockup-file-list {
+            flex: 1;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1px));
+            gap: 1rem;
+            align-content: start;
+        }
+
+        .mockup-file-item {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.75rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .mockup-file-item:hover {
+            background: rgba(52, 152, 219, 0.1);
+            border-color: var(--secondary-color);
+        }
+
+        .mockup-file-item.folder {
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .mockup-file-item.file {
+            border-left: 4px solid #ccc;
+        }
+
+        .quick-tips {
+            background: #e3f2fd;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .tip-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .tip-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .tip-icon {
+            background: var(--success-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .search-techniques {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .search-examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .search-example {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-example code {
+            background: var(--dark-bg);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 4px;
+            display: block;
+            margin: 0.5rem 0;
+            font-family: monospace;
+        }
+
+        .history-bookmarks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .history-item, .bookmark-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .history-item:hover, .bookmark-item:hover {
+            background: rgba(52, 152, 219, 0.05);
+            transform: translateX(5px);
+        }
+
+        .path-display {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            flex: 1;
+        }
+
+        .interactive-demo {
+            background: var(--gradient-navigation);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .demo-button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .demo-button:hover {
+            background: white;
+            color: var(--primary-color);
+        }
+
+        .demo-output {
+            background: rgba(0,0,0,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-tutorial {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: var(--light-bg);
+            border-radius: 10px;
+        }
+
+        .video-placeholder {
+            background: #333;
+            color: white;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 1rem auto;
+            max-width: 600px;
+        }
+
+        .practice-exercise {
+            background: #e8f5e9;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .exercise-task {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .exercise-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .exercise-checkbox.checked {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .interface-overview,
+            .navigation-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .mockup-content {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .mockup-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+        }
+
+        .highlight {
+            background: yellow;
+            padding: 2px 4px;
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { background-color: yellow; }
+            50% { background-color: orange; }
+            100% { background-color: yellow; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-compass"></i> Навигация в File Manager Pro</h1>
+            <p>Полное руководство по эффективному перемещению по файловой системе</p>
+        </header>
+
+        <div class="breadcrumb">
+            <a href="index.html"><i class="fas fa-home"></i> Главная</a> /
+            <a href="getting-started.html"><i class="fas fa-play-circle"></i> Начало работы</a> /
+            <span>Навигация</span>
+        </div>
+
+        <section class="quick-tips">
+            <h3><i class="fas fa-bolt"></i> Быстрые советы</h3>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
+                <div>
+                    <strong>Горячая клавиша:</strong> Нажмите <span class="keyboard-shortcut">F5</span> для обновления текущей папки
+                </div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-mouse-pointer"></i></div>
+                <div>
+                    <strong>Двойной клик</strong> по папке открывает её, по файлу — открывает файл
+                </div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon"><i class="fas fa-keyboard"></i></div>
+                <div>
+                    <strong>Tab</strong> переключает фокус между деревом папок и списком файлов
+                </div>
+            </div>
+        </section>
+
+        <h2><i class="fas fa-desktop"></i> Обзор интерфейса</h2>
+        <div class="interface-overview">
+            <div class="interface-section">
+                <h3><i class="fas fa-bars"></i> Панель инструментов</h3>
+                <div class="interface-element" data-tooltip="Вернуться к предыдущей папке">
+                    <div class="element-icon"><i class="fas fa-arrow-left"></i></div>
+                    <div>
+                        <strong>Назад</strong><br>
+                        <small><span class="keyboard-shortcut">Alt+←</span> или <span class="keyboard-shortcut">Backspace</span></small>
+                    </div>
+                </div>
+                <div class="interface-element" data-tooltip="Перейти к следующей папке в истории">
+                    <div class="element-icon"><i class="fas fa-arrow-right"></i></div>
+                    <div>
+                        <strong>Вперёд</strong><br>
+                        <small><span class="keyboard-shortcut">Alt+→</span></small>
+                    </div>
+                </div>
+                <div class="interface-element" data-tooltip="Перейти в родительскую папку">
+                    <div class="element-icon"><i class="fas fa-arrow-up"></i></div>
+                    <div>
+                        <strong>Вверх</strong><br>
+                        <small><span class="keyboard-shortcut">Alt+↑</span></small>
+                    </div>
+                </div>
+                <div class="interface-element" data-tooltip="Обновить содержимое текущей папки">
+                    <div class="element-icon"><i class="fas fa-sync-alt"></i></div>
+                    <div>
+                        <strong>Обновить</strong><br>
+                        <small><span class="keyboard-shortcut">F5</span></small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interface-section">
+                <h3><i class="fas fa-columns"></i> Основные области</h3>
+                <div class="interface-element" data-tooltip="Иерархическое дерево папок">
+                    <div class="element-icon"><i class="fas fa-sitemap"></i></div>
+                    <div>
+                        <strong>Дерево папок</strong><br>
+                        <small>Структура каталогов</small>
+                    </div>
+                </div>
+                <div class="interface-element" data-tooltip="Содержимое текущей папки">
+                    <div class="element-icon"><i class="fas fa-list"></i></div>
+                    <div>
+                        <strong>Список файлов</strong><br>
+                        <small>Файлы и подпапки</small>
+                    </div>
+                </div>
+                <div class="interface-element" data-tooltip="Текущий путь, можно редактировать">
+                    <div class="element-icon"><i class="fas fa-map-signs"></i></div>
+                    <div>
+                        <strong>Адресная строка</strong><br>
+                        <small>Путь к текущей папке</small>
+                    </div>
+                </div>
+                <div class="interface-element" data-tooltip="Информация о выбранных файлах">
+                    <div class="element-icon"><i class="fas fa-info-circle"></i></div>
+                    <div>
+                        <strong>Статус бар</strong><br>
+                        <small>Сведения и статистика</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2><i class="fas fa-route"></i> Методы навигации</h2>
+        <div class="navigation-methods">
+            <div class="method-card">
+                <div class="badge">Рекомендуется</div>
+                <h4><i class="fas fa-mouse-pointer"></i> Мышью</h4>
+                <ul>
+                    <li>Двойной клик по папке</li>
+                    <li>Контекстное меню (правый клик)</li>
+                    <li>Drag & Drop для перемещения</li>
+                    <li>Клик по элементам дерева</li>
+                </ul>
+            </div>
+
+            <div class="method-card">
+                <div class="badge">Быстро</div>
+                <h4><i class="fas fa-keyboard"></i> Клавиатурой</h4>
+                <p>Основные сочетания:</p>
+                <div>
+                    <span class="keyboard-shortcut">↑</span><span class="keyboard-shortcut">↓</span> — Выбор файлов<br>
+                    <span class="keyboard-shortcut">Enter</span> — Открыть папку/файл<br>
+                    <span class="keyboard-shortcut">Tab</span> — Переключение областей<br>
+                    <span class="keyboard-shortcut">Ctrl+F</span> — Поиск
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="badge">Точно</div>
+                <h4><i class="fas fa-map-marker-alt"></i> По пути</h4>
+                <p>Введите путь вручную:</p>
+                <div class="path-display">C:\Users\Имя\Документы</div>
+                <p>Используйте автодополнение по <span class="keyboard-shortcut">Tab</span></p>
+            </div>
+
+            <div class="method-card">
+                <div class="badge">Умно</div>
+                <h4><i class="fas fa-search"></i> Поиск</h4>
+                <p>Быстрый поиск файлов:</p>
+                <div class="path-display">*.txt в C:\Windows</div>
+                <p>Поддержка wildcards и фильтров</p>
+            </div>
+        </div>
+
+        <div class="visual-guide">
+            <h3><i class="fas fa-eye"></i> Визуальный гид по навигации</h3>
+            <div class="file-explorer-mockup">
+                <div class="mockup-toolbar">
+                    <div class="mockup-toolbar-button"><i class="fas fa-arrow-left"></i> Назад</div>
+                    <div class="mockup-toolbar-button"><i class="fas fa-arrow-right"></i> Вперёд</div>
+                    <div class="mockup-toolbar-button"><i class="fas fa-arrow-up"></i> Вверх</div>
+                    <div style="flex: 1; background: white; color: #333; padding: 0.25rem 0.5rem; border-radius: 4px;">
+                        C:\Users\Документы\Проекты
+                    </div>
+                    <div class="mockup-toolbar-button"><i class="fas fa-search"></i></div>
+                </div>
+                <div class="mockup-content">
+                    <div class="mockup-sidebar">
+                        <div style="margin-bottom: 1rem; color: var(--primary-color); font-weight: bold;">
+                            <i class="fas fa-folder"></i> Быстрый доступ
+                        </div>
+                        <div style="padding-left: 1rem;">
+                            <div><i class="far fa-folder"></i> Рабочий стол</div>
+                            <div><i class="far fa-folder"></i> Документы</div>
+                            <div><i class="far fa-folder"></i> Загрузки</div>
+                        </div>
+                        <div style="margin: 1rem 0; color: var(--primary-color); font-weight: bold;">
+                            <i class="fas fa-hdd"></i> Диски
+                        </div>
+                        <div style="padding-left: 1rem;">
+                            <div><i class="fas fa-hdd"></i> Локальный диск (C:)</div>
+                            <div><i class="fas fa-hdd"></i> Data (D:)</div>
+                        </div>
+                    </div>
+                    <div class="mockup-file-list">
+                        <div class="mockup-file-item folder">
+                            <i class="fas fa-folder"></i><br>
+                            <small>FileManagerPro</small>
+                        </div>
+                        <div class="mockup-file-item folder">
+                            <i class="fas fa-folder"></i><br>
+                            <small>Важные документы</small>
+                        </div>
+                        <div class="mockup-file-item file">
+                            <i class="far fa-file-word"></i><br>
+                            <small>Отчёт.docx</small>
+                        </div>
+                        <div class="mockup-file-item file">
+                            <i class="far fa-file-excel"></i><br>
+                            <small>Бюджет.xlsx</small>
+                        </div>
+                        <div class="mockup-file-item file">
+                            <i class="far fa-file-image"></i><br>
+                            <small>Фото.jpg</small>
+                        </div>
+                        <div class="mockup-file-item file">
+                            <i class="far fa-file-pdf"></i><br>
+                            <small>Руководство.pdf</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 1rem; font-style: italic; color: #666;">
+                Кликайте по элементам для навигации. Двойной клик по папке открывает её содержимое.
+            </p>
+        </div>
+
+        <div class="search-techniques">
+            <h3><i class="fas fa-search"></i> Техники поиска файлов</h3>
+            <p>Используйте мощный поиск для быстрого нахождения файлов:</p>
+            
+            <div class="search-examples">
+                <div class="search-example">
+                    <strong>Поиск по имени:</strong>
+                    <code>отчёт*.docx</code>
+                    Находит все файлы Word, начинающиеся с "отчёт"
+                </div>
+                <div class="search-example">
+                    <strong>Поиск по расширению:</strong>
+                    <code>*.pdf</code>
+                    Находит все PDF файлы в текущей папке и подпапках
+                </div>
+                <div class="search-example">
+                    <strong>Комбинированный поиск:</strong>
+                    <code>2024_*.xlsx</code>
+                    Находит Excel файлы 2024 года
+                </div>
+                <div class="search-example">
+                    <strong>Поиск с размером:</strong>
+                    <code>size:>10MB *.mp4</code>
+                    Находит видео файлы больше 10MB
+                </div>
+            </div>
+            
+            <div class="tip-item" style="margin-top: 1rem;">
+                <div class="tip-icon"><i class="fas fa-magic"></i></div>
+                <div>
+                    <strong>Совет:</strong> Используйте <span class="keyboard-shortcut">Ctrl+F</span> для быстрого доступа к поиску. 
+                    Поиск сохраняет историю последних запросов.
+                </div>
+            </div>
+        </div>
+
+        <h3><i class="fas fa-history"></i> История и закладки</h3>
+        <div class="history-bookmarks">
+            <div>
+                <h4><i class="fas fa-history"></i> История навигации</h4>
+                <p>Программа запоминает ваши последние переходы:</p>
+                <div class="history-item">
+                    <div class="element-icon"><i class="fas fa-folder"></i></div>
+                    <div class="path-display">C:\Windows\System32</div>
+                    <small>10:25</small>
+                </div>
+                <div class="history-item">
+                    <div class="element-icon"><i class="fas fa-folder"></i></div>
+                    <div class="path-display">D:\Projects\FileManager</div>
+                    <small>10:15</small>
+                </div>
+                <div class="history-item">
+                    <div class="element-icon"><i class="fas fa-folder"></i></div>
+                    <div class="path-display">C:\Users\Документы</div>
+                    <small>09:45</small>
+                </div>
+            </div>
+            
+            <div>
+                <h4><i class="fas fa-bookmark"></i> Закладки</h4>
+                <p>Добавляйте часто используемые папки в закладки:</p>
+                <div class="bookmark-item">
+                    <div class="element-icon" style="background: #ff9800;"><i class="fas fa-star"></i></div>
+                    <div class="path-display">Рабочий стол</div>
+                    <span class="keyboard-shortcut">Ctrl+1</span>
+                </div>
+                <div class="bookmark-item">
+                    <div class="element-icon" style="background: #ff9800;"><i class="fas fa-star"></i></div>
+                    <div class="path-display">Загрузки</div>
+                    <span class="keyboard-shortcut">Ctrl+2</span>
+                </div>
+                <div class="bookmark-item">
+                    <div class="element-icon" style="background: #ff9800;"><i class="fas fa-star"></i></div>
+                    <div class="path-display">C:\Важные документы</div>
+                    <span class="keyboard-shortcut">Ctrl+3</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <h3><i class="fas fa-gamepad"></i> Интерактивная демонстрация</h3>
+            <p>Попробуйте различные методы навигации:</p>
+            
+            <div class="demo-controls">
+                <div class="demo-button" onclick="navigateDemo('back')">
+                    <i class="fas fa-arrow-left"></i> Назад
+                </div>
+                <div class="demo-button" onclick="navigateDemo('forward')">
+                    <i class="fas fa-arrow-right"></i> Вперёд
+                </div>
+                <div class="demo-button" onclick="navigateDemo('up')">
+                    <i class="fas fa-arrow-up"></i> Вверх
+                </div>
+                <div class="demo-button" onclick="navigateDemo('refresh')">
+                    <i class="fas fa-sync-alt"></i> Обновить
+                </div>
+                <div class="demo-button" onclick="navigateDemo('search')">
+                    <i class="fas fa-search"></i> Поиск
+                </div>
+            </div>
+            
+            <div class="demo-output" id="demoOutput">
+                Текущая папка: <strong>C:\Users\Демо</strong>
+            </div>
+            
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Нажмите клавиши: ← → ↑ F5 для управления с клавиатуры
+            </p>
+        </div>
+
+        <div class="practice-exercise">
+            <h3><i class="fas fa-graduation-cap"></i> Практическое упражнение</h3>
+            <p>Выполните эти задания для освоения навигации:</p>
+            
+            <div class="exercise-task" onclick="toggleExercise(this)">
+                <div class="exercise-checkbox"></div>
+                <div>
+                    <strong>Задание 1:</strong> Откройте папку "Документы" тремя разными способами
+                </div>
+            </div>
+            
+            <div class="exercise-task" onclick="toggleExercise(this)">
+                <div class="exercise-checkbox"></div>
+                <div>
+                    <strong>Задание 2:</strong> Найдите все файлы .txt в папке Windows
+                </div>
+            </div>
+            
+            <div class="exercise-task" onclick="toggleExercise(this)">
+                <div class="exercise-checkbox"></div>
+                <div>
+                    <strong>Задание 3:</strong> Добавьте текущую папку в закладки (Ctrl+D)
+                </div>
+            </div>
+            
+            <div class="exercise-task" onclick="toggleExercise(this)">
+                <div class="exercise-checkbox"></div>
+                <div>
+                    <strong>Задание 4:</strong> Используйте историю для возврата к предыдущим 3 папкам
+                </div>
+            </div>
+        </div>
+
+        <div class="video-tutorial">
+            <h3><i class="fas fa-video"></i> Видео-руководство по навигации</h3>
+            <div class="video-placeholder">
+                <i class="fas fa-play-circle" style="font-size: 4rem; opacity: 0.7;"></i>
+            </div>
+            <p>Посмотрите это видео для визуального обучения методам навигации.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1rem;">
+                <a href="#" class="demo-button" style="background: white; color: #333;">
+                    <i class="fab fa-youtube"></i> YouTube
+                </a>
+                <a href="#" class="demo-button" style="background: white; color: #333;">
+                    <i class="fas fa-download"></i> Скачать
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p>File Manager Pro • Руководство по навигации • Версия 1.0.0</p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #888;">
+                <i class="fas fa-arrow-alt-circle-right"></i> Следующий раздел: 
+                <a href="operations.html" style="color: var(--secondary-color);">Операции с файлами</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Интерактивная демонстрация
+        const demoPaths = [
+            "C:\\Users\\Демо",
+            "C:\\Users\\Демо\\Документы",
+            "C:\\Users\\Демо\\Документы\\Проекты",
+            "C:\\Users\\Демо\\Изображения",
+            "C:\\Users\\Демо\\Загрузки"
+        ];
+        
+        let demoIndex = 0;
+        let demoHistory = [0];
+        let historyPointer = 0;
+        
+        function navigateDemo(action) {
+            const output = document.getElementById('demoOutput');
+            
+            switch(action) {
+                case 'back':
+                    if (historyPointer > 0) {
+                        historyPointer--;
+                        demoIndex = demoHistory[historyPointer];
+                    }
+                    break;
+                    
+                case 'forward':
+                    if (historyPointer < demoHistory.length - 1) {
+                        historyPointer++;
+                        demoIndex = demoHistory[historyPointer];
+                    }
+                    break;
+                    
+                case 'up':
+                    // Имитация перехода на уровень выше
+                    if (demoPaths[demoIndex].lastIndexOf('\\') > 2) {
+                        demoIndex = Math.max(0, demoIndex - 1);
+                        demoHistory = demoHistory.slice(0, historyPointer + 1);
+                        demoHistory.push(demoIndex);
+                        historyPointer = demoHistory.length - 1;
+                    }
+                    break;
+                    
+                case 'refresh':
+                    output.innerHTML = `Текущая папка: <strong>${demoPaths[demoIndex]}</strong> <br>
+                                       <small style="color: #4CAF50;"><i class="fas fa-check-circle"></i> Папка обновлена</small>`;
+                    output.style.background = 'rgba(76, 175, 80, 0.2)';
+                    setTimeout(() => {
+                        output.style.background = '';
+                    }, 1000);
+                    return;
+                    
+                case 'search':
+                    output.innerHTML = `🔍 Поиск в: <strong>${demoPaths[demoIndex]}</strong> <br>
+                                       <input type="text" placeholder="Введите запрос..." 
+                                              style="margin-top: 5px; padding: 5px; border: none; border-radius: 4px; width: 80%;">`;
+                    return;
+                    
+                default:
+                    // Навигация в новую папку
+                    const newIndex = Math.min(demoPaths.length - 1, demoIndex + 1);
+                    if (newIndex !== demoIndex) {
+                        demoIndex = newIndex;
+                        demoHistory = demoHistory.slice(0, historyPointer + 1);
+                        demoHistory.push(demoIndex);
+                        historyPointer = demoHistory.length - 1;
+                    }
+            }
+            
+            output.innerHTML = `Текущая папка: <strong>${demoPaths[demoIndex]}</strong>`;
+            
+            // Анимация
+            output.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                output.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // Управление с клавиатуры
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT') return;
+            
+            switch(e.key) {
+                case 'ArrowLeft':
+                    navigateDemo('back');
+                    break;
+                case 'ArrowRight':
+                    navigateDemo('forward');
+                    break;
+                case 'ArrowUp':
+                    navigateDemo('up');
+                    break;
+                case 'F5':
+                    e.preventDefault();
+                    navigateDemo('refresh');
+                    break;
+                case 'F3':
+                case 'f':
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        navigateDemo('search');
+                    }
+                    break;
+            }
+        });
+        
+        // Упражнения
+        function toggleExercise(task) {
+            const checkbox = task.querySelector('.exercise-checkbox');
+            checkbox.classList.toggle('checked');
+            
+            if (checkbox.classList.contains('checked')) {
+                checkbox.innerHTML = '✓';
+                
+                // Анимация
+                task.style.background = '#e8f5e9';
+                setTimeout(() => {
+                    task.style.background = '';
+                }, 1000);
+                
+                // Проверяем все ли выполнены
+                const allTasks = document.querySelectorAll('.exercise-task');
+                const completed = document.querySelectorAll('.exercise-checkbox.checked');
+                
+                if (allTasks.length === completed.length) {
+                    alert('🎉 Отлично! Вы освоили основы навигации!');
+                }
+            } else {
+                checkbox.innerHTML = '';
+            }
+        }
+        
+        // Подсказки при наведении
+        document.querySelectorAll('.interface-element').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '';
+            });
+        });
+        
+        // Имитация работы дерева папок
+        document.querySelectorAll('.mockup-file-item.folder').forEach(folder => {
+            folder.addEventListener('click', function() {
+                const folderName = this.querySelector('small').textContent;
+                const currentPath = document.querySelector('.mockup-toolbar > div:nth-child(4)');
+                
+                // Анимация
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+                
+                // Обновляем путь
+                const newPath = currentPath.textContent + '\\' + folderName;
+                currentPath.textContent = newPath;
+                
+                // Подсвечиваем активную папку
+                document.querySelectorAll('.mockup-file-item.folder').forEach(f => {
+                    f.style.borderLeftColor = '#3498db';
+                });
+                this.style.borderLeftColor = '#e74c3c';
+            });
+        });
+        
+        // Автоматическое прокручивание к активному элементу
+        let currentSection = '';
+        const sections = document.querySelectorAll('h2, h3');
+        
+        window.addEventListener('scroll', () => {
+            let newSection = '';
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.top >= -100) {
+                    newSection = section.id || section.textContent;
+                }
+            });
+            
+            if (newSection !== currentSection) {
+                currentSection = newSection;
+                // Можно добавить индикацию текущего раздела
+            }
+        });
+        
+        // Инициализация демо
+        window.addEventListener('load', () => {
+            // Добавляем обработчик для поля поиска в демо
+            document.addEventListener('click', (e) => {
+                if (e.target.type === 'text' && e.target.parentElement === document.getElementById('demoOutput')) {
+                    e.target.focus();
+                }
+            });
+            
+            // Анимация загрузки
+            document.querySelectorAll('.method-card').forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

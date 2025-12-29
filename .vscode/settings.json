@@ -1,0 +1,73 @@
+{
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c",
+        "*.hpp": "cpp",
+        "*.cpp": "cpp",
+        "*.cc": "cpp",
+        "*.cs": "csharp"
+    },
+    
+    // ========== C настройки ==========
+    "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
+    "C_Cpp.default.compilerPath": "/usr/bin/gcc",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/usr/include",
+        "/usr/local/include"
+    ],
+    "C_Cpp.default.defines": [
+        "LINUX",
+        "_GNU_SOURCE"
+    ],
+    "C_Cpp.default.cStandard": "c17",
+    "[c]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    
+    // ========== C++ настройки ==========
+    "C_Cpp.default.cppStandard": "gnu++17",
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "[cpp]": {
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
+    
+    // ========== C# настройки ==========
+    "omnisharp.enableRoslynAnalyzers": true,
+    "omnisharp.enableEditorConfigSupport": true,
+    "omnisharp.path": "latest",
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    },
+    
+    // ========== Общие настройки ==========
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "editor.formatOnSave": true,
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+    "C_Cpp.codeAnalysis.runAutomatically": true,
+    "files.exclude": {
+        "**/*.o": true,
+        "**/*.so": true,
+        "**/*.a": true,
+        "**/bin/": true,
+        "**/obj/": true
+    },
+    "cmake.configureOnOpen": false,
+    "C_Cpp.autocomplete": "disabled",
+    "C_Cpp.errorSquiggles": "enabled",
+    "workbench.editorAssociations": {
+        "*.md": "vscode.markdown.preview.editor"
+    },
+    "explorer.compactFolders": false,
+    // ========== Расширения для всех языков ==========
+    "extensions": {
+        "recommendations": [
+            "ms-vscode.cpptools",           // C/C++
+            "ms-dotnettools.csharp",        // C#
+            "ms-vscode.cmake-tools",        // CMake
+            "formulahendry.code-runner",    // Запуск кода
+            "austin.code-gnu-global",       // Навигация по коду
+            "streetsidesoftware.code-spell-checker" // Проверка орфографии
+        ]
+    }
+}

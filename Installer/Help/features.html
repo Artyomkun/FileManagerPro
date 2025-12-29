@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Возможности - File Manager Pro</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --purple-color: #9b59b6;
+            --teal-color: #1abc9c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --border-color: #dee2e6;
+            --text-dark: #333;
+            --text-light: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-features: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: var(--gradient-primary);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+            box-shadow: var(--shadow);
+        }
+
+        header {
+            background: var(--gradient-features);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '✨';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .feature-categories {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .category-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--light-bg);
+            border: 2px solid transparent;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-tab:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .category-tab.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid var(--border-color);
+            height: 100%;
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: var(--secondary-color);
+        }
+
+        .feature-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            position: relative;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .feature-content {
+            padding: 1.5rem;
+        }
+
+        .feature-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .feature-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tech-stack {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .tech-item:hover {
+            border-color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        .tech-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--purple-color));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .comparison-check {
+            color: var(--success-color);
+            font-size: 1.2rem;
+        }
+
+        .comparison-cross {
+            color: var(--accent-color);
+            font-size: 1.2rem;
+        }
+
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid var(--border-color);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 0.5rem 0;
+        }
+
+        .metric-bar {
+            height: 8px;
+            background: var(--light-bg);
+            border-radius: 4px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary-color), var(--teal-color));
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .demo-showcase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .demo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .demo-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .demo-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .demo-preview {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .testimonials {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        .testimonial-slider {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            min-width: 300px;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .feature-roadmap {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .roadmap-timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-top: 2rem;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--secondary-color);
+        }
+
+        .roadmap-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            left: -23px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+        }
+
+        .roadmap-item.released::before {
+            background: var(--success-color);
+        }
+
+        .roadmap-item.planned::before {
+            background: var(--warning-color);
+        }
+
+        .roadmap-date {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .highlight-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .highlight-stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .feature-categories {
+                justify-content: center;
+            }
+            
+            .tech-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-tag {
+            display: inline-block;
+            background: var(--light-bg);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-visual {
+            height: 150px;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary-color);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-star"></i> Возможности File Manager Pro</h1>
+            <p>Откройте для себя мощные функции профессионального файлового менеджера</p>
+        </header>
+
+        <div class="breadcrumb">
+            <a href="index.html"><i class="fas fa-home"></i> Главная</a> /
+            <a href="getting-started.html"><i class="fas fa-play-circle"></i> Начало работы</a> /
+            <span>Возможности</span>
+        </div>
+
+        <div class="feature-highlight">
+            <h2><i class="fas fa-crown"></i> Премиум возможности</h2>
+            <p>Мощный файловый менеджер с уникальной трёхуровневой архитектурой</p>
+            
+            <div class="highlight-stats">
+                <div class="highlight-stat">
+                    <span class="stat-number">3</span>
+                    <span class="stat-label">Языка программирования</span>
+                </div>
+                <div class="highlight-stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Функций</span>
+                </div>
+                <div class="highlight-stat">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">Надёжность</span>
+                </div>
+                <div class="highlight-stat">
+                    <span class="stat-number">100x</span>
+                    <span class="stat-label">Быстрее проводника</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-categories">
+            <div class="category-tab active" onclick="filterFeatures('all')">
+                <i class="fas fa-layer-group"></i> Все возможности
+            </div>
+            <div class="category-tab" onclick="filterFeatures('core')">
+                <i class="fas fa-microchip"></i> Ядро системы
+            </div>
+            <div class="category-tab" onclick="filterFeatures('navigation')">
+                <i class="fas fa-compass"></i> Навигация
+            </div>
+            <div class="category-tab" onclick="filterFeatures('operations')">
+                <i class="fas fa-cogs"></i> Операции
+            </div>
+            <div class="category-tab" onclick="filterFeatures('advanced')">
+                <i class="fas fa-rocket"></i> Продвинутые
+            </div>
+        </div>
+
+        <div class="feature-grid" id="featureGrid">
+            <!-- Ядро системы -->
+            <div class="feature-card" data-category="core">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <span class="feature-badge">Архитектура</span>
+                    <h3>Трёхуровневая архитектура</h3>
+                </div>
+                <div class="feature-content">
+                    <p>C (ядро) → C++ (логика) → C# (интерфейс) для максимальной производительности</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-sitemap fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">C/C++/C#</div>
+                    <div class="feature-tag">Высокая скорость</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-bolt"></i> 100x быстрее
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-memory"></i> Экономная память
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="core">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <span class="feature-badge">Технологии</span>
+                    <h3>Кросс-языковая интеграция</h3>
+                </div>
+                <div class="feature-content">
+                    <p>Бесперебойное взаимодействие между C, C++ и C# через P/Invoke и COM</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-exchange-alt fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">P/Invoke</div>
+                    <div class="feature-tag">COM Interop</div>
+                    <div class="feature-tag">DLL Integration</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-link"></i> Полная интеграция
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-shield-alt"></i> Безопасно
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Навигация -->
+            <div class="feature-card" data-category="navigation">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <span class="feature-badge">Поиск</span>
+                    <h3>Интеллектуальный поиск</h3>
+                </div>
+                <div class="feature-content">
+                    <p>Мгновенный поиск с поддержкой wildcards, регулярных выражений и фильтров</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-search-plus fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">Wildcards</div>
+                    <div class="feature-tag">Regex</div>
+                    <div class="feature-tag">Фильтры</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i> < 1 сек
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-database"></i> Индексация
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="navigation">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <span class="feature-badge">Умная</span>
+                    <h3>История и закладки</h3>
+                </div>
+                <div class="feature-content">
+                    <p>Неограниченная история навигации и умные закладки с быстрым доступом</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-bookmark fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">История</div>
+                    <div class="feature-tag">Закладки</div>
+                    <div class="feature-tag">Избранное</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-undo"></i> Неограниченная
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-star"></i> Умные
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Операции -->
+            <div class="feature-card" data-category="operations">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    <span class="feature-badge">Мощная</span>
+                    <h3>Пакетные операции</h3>
+                </div>
+                <div class="feature-content">
+                    <p>Массовые операции с файлами: копирование, перемещение, переименование</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-th-large fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">Пакетная обработка</div>
+                    <div class="feature-tag">Массовые операции</div>
+                    <div class="feature-tag">Шаблоны</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-tachometer-alt"></i> Параллельно
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-pause"></i> Приостановка
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="operations">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <span class="feature-badge">Безопасная</span>
+                    <h3>Расширенное копирование</h3>
+                </div>
+                <div class="feature-content">
+                    <p>Интеллектуальное копирование с проверкой контрольных сумм и возобновлением</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-sync-alt fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">Resume</div>
+                    <div class="feature-tag">Проверка</div>
+                    <div class="feature-tag">Безопасность</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-shield-alt"></i> Безопасно
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-redo"></i> Возобновление
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Продвинутые -->
+            <div class="feature-card" data-category="advanced">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <span class="feature-badge">Анализ</span>
+                    <h3>Анализ дискового пространства</h3>
+                </div>
+                <div class="feature-content">
+                    <p>Визуализация использования диска и поиск больших файлов</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-chart-bar fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">Визуализация</div>
+                    <div class="feature-tag">Аналитика</div>
+                    <div class="feature-tag">Статистика</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i> Визуальный
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-filter"></i> Фильтры
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-category="advanced">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <span class="feature-badge">Расширяемость</span>
+                    <h3>Система плагинов</h3>
+                </div>
+                <div class="feature-content">
+                    <p>Поддержка плагинов для расширения функциональности</p>
+                    <div class="feature-visual">
+                        <i class="fas fa-puzzle-piece fa-3x"></i>
+                    </div>
+                    <div class="feature-tag">API</div>
+                    <div class="feature-tag">Плагины</div>
+                    <div class="feature-tag">Расширения</div>
+                    <div class="feature-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-code-branch"></i> Открытый API
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-boxes"></i> Библиотека
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <h3><i class="fas fa-cogs"></i> Технологический стек</h3>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fab fa-microsoft"></i>
+                    </div>
+                    <div>
+                        <strong>Ядро</strong><br>
+                        <small>C + WinAPI</small>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div>
+                        <strong>Логика</strong><br>
+                        <small>C++17 + STL</small>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fab fa-windows"></i>
+                    </div>
+                    <div>
+                        <strong>Интерфейс</strong><br>
+                        <small>C# + WPF + .NET 6</small>
+                    </div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div>
+                        <strong>Упаковка</strong><br>
+                        <small>Inno Setup</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="performance-metrics">
+            <div class="metric-card">
+                <i class="fas fa-tachometer-alt fa-2x"></i>
+                <h4>Скорость навигации</h4>
+                <div class="metric-value">0.2 сек</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" style="width: 95%"></div>
+                </div>
+                <small>Загрузка папки с 1000 файлов</small>
+            </div>
+            
+            <div class="metric-card">
+                <i class="fas fa-memory fa-2x"></i>
+                <h4>Использование памяти</h4>
+                <div class="metric-value">50 MB</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" style="width: 60%"></div>
+                </div>
+                <small>Среднее потребление ОЗУ</small>
+            </div>
+            
+            <div class="metric-card">
+                <i class="fas fa-hdd fa-2x"></i>
+                <h4>Эффективность кэша</h4>
+                <div class="metric-value">98%</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" style="width: 98%"></div>
+                </div>
+                <small>Попадание в кэш</small>
+            </div>
+            
+            <div class="metric-card">
+                <i class="fas fa-bolt fa-2x"></i>
+                <h4>Скорость поиска</h4>
+                <div class="metric-value">0.5 сек</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" style="width: 90%"></div>
+                </div>
+                <small>Поиск по 10k файлов</small>
+            </div>
+        </div>
+
+        <div class="comparison-table">
+            <h3><i class="fas fa-balance-scale"></i> Сравнение с конкурентами</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Функция</th>
+                        <th>File Manager Pro</th>
+                        <th>Проводник Windows</th>
+                        <th>Total Commander</th>
+                        <th>FreeCommander</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Трёхуровневая архитектура</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Кросс-языковая интеграция</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Умный поиск с wildcards</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Пакетные операции</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Анализ дискового пространства</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Система плагинов</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Контекстное меню проводника</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Бесплатная лицензия</td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                        <td><i class="fas fa-times comparison-cross"></i></td>
+                        <td><i class="fas fa-check comparison-check"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="feature-roadmap">
+            <h3><i class="fas fa-map"></i> Дорожная карта развития</h3>
+            <p>Планы по развитию и улучшению File Manager Pro:</p>
+            
+            <div class="roadmap-timeline">
+                <div class="roadmap-item released">
+                    <div class="roadmap-date">Q4 2024 - Выпущено</div>
+                    <h4>Версия 1.0.0</h4>
+                    <p>Базовый функционал файлового менеджера с трёхуровневой архитектурой</p>
+                </div>
+                
+                <div class="roadmap-item planned">
+                    <div class="roadmap-date">Q1 2025 - Планируется</div>
+                    <h4>Версия 1.1.0</h4>
+                    <p>Интеграция облачных хранилищ (Google Drive, Dropbox, OneDrive)</p>
+                </div>
+                
+                <div class="roadmap-item planned">
+                    <div class="roadmap-date">Q2 2025 - Планируется</div>
+                    <h4>Версия 1.2.0</h4>
+                    <p>Расширенная система плагинов и магазин расширений</p>
+                </div>
+                
+                <div class="roadmap-item planned">
+                    <div class="roadmap-date">Q3 2025 - Планируется</div>
+                    <h4>Версия 2.0.0</div>
+                    <h4>Версия 2.0.0</h4>
+                    <p>Полная переработка интерфейса с поддержкой тем и кастомных макетов</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="testimonials">
+            <h3><i class="fas fa-comments"></i> Отзывы пользователей</h3>
+            <div class="testimonial-slider">
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "File Manager Pro полностью изменил мою работу с файлами. Скорость работы просто потрясающая!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">АС</div>
+                        <div>
+                            <strong>Алексей Смирнов</strong><br>
+                            <small>Системный администратор</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Уникальная архитектура на трёх языках показывает, что такое настоящая оптимизация."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">МК</div>
+                        <div>
+                            <strong>Мария Козлова</strong><br>
+                            <small>Разработчик ПО</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-text">
+                        "Пакетные операции экономят мне несколько часов в неделю. Незаменимый инструмент!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">ДИ</div>
+                        <div>
+                            <strong>Дмитрий Иванов</strong><br>
+                            <small>Дизайнер</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>File Manager Pro • Полный обзор возможностей • Версия 1.0.0</p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #888;">
+                <i class="fas fa-arrow-alt-circle-right"></i> Следующий раздел: 
+                <a href="navigation.html" style="color: var(--secondary-color);">Навигация</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Фильтрация функций
+        function filterFeatures(category) {
+            const cards = document.querySelectorAll('.feature-card');
+            const tabs = document.querySelectorAll('.category-tab');
+            
+            // Обновляем активную вкладку
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Фильтруем карточки
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    
+                    // Анимация появления
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Анимация метрик
+        function animateMetrics() {
+            const metrics = document.querySelectorAll('.metric-fill');
+            metrics.forEach(metric => {
+                metric.style.width = '0%';
+                setTimeout(() => {
+                    metric.style.width = metric.style.width;
+                }, 500);
+            });
+        }
+        
+        // Автоматическая прокрутка отзывов
+        let testimonialIndex = 0;
+        function rotateTestimonials() {
+            const slider = document.querySelector('.testimonial-slider');
+            const cards = document.querySelectorAll('.testimonial-card');
+            const cardWidth = cards[0].offsetWidth + 24; // + gap
+            
+            testimonialIndex = (testimonialIndex + 1) % cards.length;
+            slider.scrollLeft = testimonialIndex * cardWidth;
+        }
+        
+        // Инициализация
+        window.addEventListener('load', () => {
+            // Анимация загрузки карточек
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+            
+            // Анимация метрик
+            setTimeout(animateMetrics, 1000);
+            
+            // Запуск автоматической прокрутки отзывов
+            setInterval(rotateTestimonials, 5000);
+            
+            // Плавная прокрутка
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+        
+        // Эффект при наведении на карточки функций
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 20px 40px rgba(0,0,0,0.2)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.boxShadow = 'var(--shadow)';
+            });
+        });
+        
+        // Интерактивное сравнение
+        document.querySelectorAll('.comparison-table tr').forEach(row => {
+            row.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
+            });
+            
+            row.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = '';
+            });
+        });
+        
+        // Подсветка преимуществ
+        const checkmarks = document.querySelectorAll('.comparison-check');
+        checkmarks.forEach((check, index) => {
+            setTimeout(() => {
+                check.style.transform = 'scale(1.3)';
+                setTimeout(() => {
+                    check.style.transform = 'scale(1)';
+                }, 300);
+            }, index * 200);
+        });
+        
+        // Анимация road map
+        const roadmapItems = document.querySelectorAll('.roadmap-item');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateX(0)';
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        roadmapItems.forEach(item => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(-20px)';
+            item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

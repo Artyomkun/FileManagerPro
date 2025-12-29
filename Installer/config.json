@@ -1,0 +1,441 @@
+{
+    "$schema": "./schemas/config.schema.json",
+    "configVersion": "1.0.0",
+    "lastUpdated": "2024-01-15T10:30:00Z",
+    
+    "application": {
+        "name": "File Manager Pro",
+        "version": "1.0.0",
+        "buildNumber": "2024.01.15.1030",
+        "architecture": "x64",
+        "minimumWindowsVersion": "10.0.18362.0",
+        "requiresAdminForInstall": true,
+        "requiresAdminForOperations": false,
+        "supportedLanguages": ["ru", "en"],
+        "defaultLanguage": "ru"
+    },
+    
+    "installation": {
+        "defaultInstallPath": "$ProgramFiles$\\FileManagerPro",
+        "alternateInstallPaths": [
+            "$LocalAppData$\\Programs\\FileManagerPro",
+            "$UserProfile$\\FileManagerPro"
+        ],
+        "requiredDiskSpaceMB": 200,
+        "createDesktopShortcut": true,
+        "createStartMenuShortcut": true,
+        "addToPath": false,
+        "registerFileAssociations": {
+            ".fmproj": "FileManagerPro.Project",
+            ".fmconfig": "FileManagerPro.Config"
+        },
+        "addToExplorerContextMenu": true,
+        "installVCppRedist": true,
+        "installDotNetRuntime": false,
+        "createUninstallEntry": true
+    },
+    
+    "components": {
+        "coreComponents": {
+            "gui": {
+                "name": "Графический интерфейс (C# WPF)",
+                "files": [
+                    "FileManager.exe",
+                    "FileManager.exe.config",
+                    "FileManager.pdb"
+                ],
+                "required": true,
+                "sizeMB": 15,
+                "description": "Основной исполняемый файл и интерфейс пользователя"
+            },
+            "logicLib": {
+                "name": "Библиотека логики (C++)",
+                "files": ["LogicLib_Cpp.dll", "LogicLib_Cpp.pdb"],
+                "required": true,
+                "sizeMB": 8,
+                "description": "Библиотека навигации и алгоритмов"
+            },
+            "coreLib": {
+                "name": "Ядро системы (C)",
+                "files": ["CoreLib_C.dll", "CoreLib_C.pdb"],
+                "required": true,
+                "sizeMB": 5,
+                "description": "Низкоуровневые файловые операции"
+            }
+        },
+        
+        "optionalComponents": {
+            "documentation": {
+                "name": "Документация",
+                "files": ["Help/**/*"],
+                "required": false,
+                "sizeMB": 25,
+                "description": "Руководство пользователя и справочные материалы",
+                "defaultSelected": true
+            },
+            "examples": {
+                "name": "Примеры и шаблоны",
+                "files": ["Examples/**/*"],
+                "required": false,
+                "sizeMB": 10,
+                "description": "Примеры использования и готовые шаблоны",
+                "defaultSelected": true
+            },
+            "plugins": {
+                "name": "Базовые плагины",
+                "files": ["Plugins/**/*"],
+                "required": false,
+                "sizeMB": 15,
+                "description": "Расширения базовой функциональности",
+                "defaultSelected": true
+            },
+            "explorerIntegration": {
+                "name": "Интеграция с проводником",
+                "registry": [
+                    {
+                        "key": "HKCR\\Directory\\shell\\FileManagerPro",
+                        "values": {
+                            "": "Открыть в File Manager Pro",
+                            "Icon": "$InstallDir$\\FileManager.exe,0"
+                        }
+                    }
+                ],
+                "required": false,
+                "sizeMB": 0,
+                "description": "Добавляет File Manager Pro в контекстное меню проводника",
+                "defaultSelected": true
+            }
+        },
+        
+        "redistributables": {
+            "vcppRedist": {
+                "name": "Visual C++ Redistributable 2015-2022",
+                "installer": "vcredist_x64.exe",
+                "parameters": "/install /quiet /norestart",
+                "downloadUrl": "https://aka.ms/vs/17/release/vc_redist.x64.exe",
+                "required": true,
+                "sizeMB": 35,
+                "checkRegistry": "HKLM\\SOFTWARE\\Microsoft\\VisualStudio\\14.0\\VC\\Runtimes\\x64",
+                "checkVersion": "14.30.0"
+            },
+            "dotNetRuntime": {
+                "name": ".NET 6.0 Desktop Runtime",
+                "installer": "windowsdesktop-runtime-6.0.x-win-x64.exe",
+                "parameters": "/install /quiet /norestart",
+                "downloadUrl": "https://dotnet.microsoft.com/download/dotnet/6.0/runtime",
+                "required": false,
+                "sizeMB": 120,
+                "checkRegistry": "HKLM\\SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full",
+                "checkVersion": "4.8.0"
+            }
+        }
+    },
+    
+    "dependencies": {
+        "system": {
+            "os": {
+                "name": "Windows",
+                "minVersion": "10.0.18362",
+                "architecture": "x64",
+                "editions": ["Professional", "Enterprise", "Education", "Home"]
+            },
+            "memory": {
+                "minimum": "2 GB",
+                "recommended": "4 GB"
+            },
+            "display": {
+                "resolution": "1366x768",
+                "dpi": 96
+            }
+        },
+        
+        "software": {
+            "dotnet": {
+                "name": ".NET Framework",
+                "minVersion": "4.8",
+                "required": true,
+                "errorMessage": "Требуется .NET Framework 4.8 или выше. Установите с https://dotnet.microsoft.com/"
+            },
+            "vcpp": {
+                "name": "Visual C++ Redistributable",
+                "minVersion": "14.30",
+                "required": true,
+                "errorMessage": "Требуется Visual C++ Redistributable 2015-2022."
+            }
+        }
+    },
+    
+    "features": {
+        "fileOperations": {
+            "copy": {
+                "enabled": true,
+                "verifyChecksum": true,
+                "resumeCapability": true,
+                "bufferSizeKB": 4096
+            },
+            "move": {
+                "enabled": true,
+                "useFastMove": true
+            },
+            "delete": {
+                "enabled": true,
+                "useRecycleBin": true,
+                "secureDelete": false
+            },
+            "rename": {
+                "enabled": true,
+                "batchRenaming": true,
+                "templates": ["{name}_{date}", "{name}_{counter}"]
+            }
+        },
+        
+        "navigation": {
+            "treeView": {
+                "enabled": true,
+                "lazyLoading": true,
+                "maxDepth": 10
+            },
+            "quickAccess": {
+                "enabled": true,
+                "pinnedFolders": ["Desktop", "Documents", "Downloads"],
+                "recentFoldersCount": 10
+            },
+            "search": {
+                "enabled": true,
+                "useIndexing": false,
+                "wildcards": true,
+                "regex": true,
+                "filters": ["name", "size", "date", "type"]
+            }
+        },
+        
+        "ui": {
+            "theme": {
+                "default": "light",
+                "available": ["light", "dark", "system"],
+                "accentColor": "#3498db"
+            },
+            "language": {
+                "default": "ru",
+                "available": ["ru", "en"],
+                "autoDetect": true
+            },
+            "layout": {
+                "default": "classic",
+                "available": ["classic", "compact", "detailed"],
+                "rememberLayout": true
+            }
+        },
+        
+        "performance": {
+            "cache": {
+                "enabled": true,
+                "maxSizeMB": 100,
+                "ttlMinutes": 60
+            },
+            "threading": {
+                "maxWorkerThreads": 4,
+                "ioThreads": 2
+            },
+            "memory": {
+                "useMemoryMapping": true,
+                "maxFileSizeForMMapMB": 100
+            }
+        },
+        
+        "security": {
+            "elevation": {
+                "requireAdminForSystemFolders": true,
+                "promptForElevation": true
+            },
+            "validation": {
+                "validatePaths": true,
+                "checkFileSignatures": false,
+                "virusScanIntegration": false
+            },
+            "privacy": {
+                "collectUsageData": false,
+                "telemetry": false,
+                "crashReporting": true
+            }
+        }
+    },
+    
+    "paths": {
+        "installation": "$InstallDir$",
+        "userData": "$AppData$\\FileManagerPro",
+        "logs": "$LocalAppData$\\FileManagerPro\\Logs",
+        "temp": "$Temp$\\FileManagerPro",
+        "cache": "$LocalAppData$\\FileManagerPro\\Cache",
+        "settings": "$AppData$\\FileManagerPro\\settings.json",
+        "history": "$AppData$\\FileManagerPro\\history.json",
+        "bookmarks": "$AppData$\\FileManagerPro\\bookmarks.json"
+    },
+    
+    "registry": {
+        "uninstall": {
+            "key": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\FileManagerPro",
+            "values": {
+                "DisplayName": "File Manager Pro",
+                "DisplayVersion": "$Version$",
+                "Publisher": "FileManager Inc.",
+                "InstallLocation": "$InstallDir$",
+                "UninstallString": "$InstallDir$\\uninstall.exe",
+                "QuietUninstallString": "$InstallDir$\\uninstall.exe /S",
+                "NoModify": 1,
+                "NoRepair": 1,
+                "EstimatedSize": "$SizeMB$"
+            }
+        },
+        
+        "settings": {
+            "key": "HKCU\\Software\\FileManagerPro",
+            "values": {
+                "InstallPath": "$InstallDir$",
+                "Version": "$Version$",
+                "InstallDate": "$Date$"
+            }
+        }
+    },
+    
+    "commands": {
+        "install": {
+            "main": "FileManager.exe --install --silent",
+            "prerequisites": [
+                {
+                "name": "vcpp",
+                "command": "vcredist_x64.exe /install /quiet /norestart",
+                "condition": "!IsVCRedistInstalled"
+                }
+            ]
+        },
+        
+        "uninstall": {
+            "pre": [
+                "taskkill /f /im FileManager.exe 2>nul",
+                "timeout /t 2 /nobreak >nul"
+            ],
+            "main": "msiexec /x {ProductCode} /quiet /norestart",
+            "post": [
+                "rmdir /s /q \"$AppData$\\FileManagerPro\\Cache\" 2>nul",
+                "rmdir /s /q \"$LocalAppData$\\FileManagerPro\\Temp\" 2>nul"
+            ]
+        },
+        
+        "repair": {
+            "command": "FileManager.exe --repair --silent",
+            "restoreSettings": true
+        },
+        
+        "update": {
+            "checkUrl": "https://api.example.com/filemanager/update/check",
+            "downloadUrl": "https://download.example.com/filemanager/update",
+            "autoCheck": true,
+            "autoDownload": false,
+            "autoInstall": false
+        }
+    },
+    
+    "validation": {
+        "fileChecksums": {
+            "FileManager.exe": "$SHA256$",
+            "LogicLib_Cpp.dll": "$SHA256$",
+            "CoreLib_C.dll": "$SHA256$"
+        },
+        
+        "digitalSignatures": {
+            "required": true,
+            "certificate": "FileManager Inc.",
+            "timestamp": "http://timestamp.digicert.com"
+        },
+        
+        "integrityCheck": {
+            "enabled": true,
+            "algorithm": "SHA256",
+            "onStartup": true,
+            "onUpdate": true
+        }
+    },
+    
+    "logging": {
+        "installer": {
+            "enabled": true,
+            "level": "INFO",
+            "file": "$Temp$\\FileManagerPro_Install.log",
+            "maxSizeMB": 10,
+            "maxFiles": 3
+        },
+        
+        "application": {
+            "enabled": true,
+            "level": "DEBUG",
+            "file": "$AppData$\\FileManagerPro\\Logs\\app.log",
+            "maxSizeMB": 5,
+            "maxFiles": 5
+        },
+        
+        "errorReporting": {
+            "enabled": true,
+            "url": "https://errors.example.com/filemanager",
+            "includeSystemInfo": true,
+            "includeStackTrace": true
+        }
+    },
+    
+    "customization": {
+        "branding": {
+            "companyName": "FileManager Inc.",
+            "productName": "File Manager Pro",
+            "supportUrl": "https://support.example.com/filemanager",
+            "website": "https://example.com/filemanager",
+            "email": "support@example.com"
+        },
+        
+        "eula": {
+            "file": "License.txt",
+            "required": true,
+            "language": "ru"
+        },
+        
+        "readme": {
+            "file": "Readme.txt",
+            "showOnFirstRun": true
+        },
+        
+        "welcomePage": {
+            "enabled": true,
+            "htmlFile": "Help\\getting-started.html",
+            "showOnFirstRun": true
+        }
+    },
+    
+    "advanced": {
+        "debug": {
+            "enabled": false,
+            "verboseLogging": false,
+            "breakOnError": false
+        },
+        
+        "compression": {
+            "algorithm": "LZMA2",
+            "level": "ULTRA",
+            "solid": true,
+            "dictionarySize": 64
+        },
+        
+        "optimizations": {
+            "useMultithreading": true,
+            "maxCompressionThreads": 4,
+            "memoryUsageMB": 256
+        }
+    },
+    
+    "metadata": {
+        "generatedBy": "Inno Setup 6",
+        "generatedAt": "$DateTime$",
+        "templateVersion": "1.0.0",
+        "compatibility": ["Windows 10", "Windows 11"],
+        "license": "MIT",
+        "copyright": "© 2024 FileManager Inc. All rights reserved."
+    }
+}

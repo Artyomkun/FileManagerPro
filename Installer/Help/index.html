@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager Pro - Справка</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-bg: #2c3e50;
+            --border-color: #dee2e6;
+            --text-dark: #333;
+            --text-light: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+            box-shadow: var(--shadow);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .version {
+            color: #bdc3c7;
+            font-size: 1rem;
+        }
+
+        nav {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            list-style: none;
+        }
+
+        .nav-list a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: var(--transition);
+        }
+
+        .nav-list a:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                grid-template-columns: 3fr 1fr;
+            }
+        }
+
+        section {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        section h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 i {
+            font-size: 1.5rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .hotkey-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .hotkey-table th, .hotkey-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hotkey-table th {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .hotkey-table tr:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .code-block {
+            background: var(--dark-bg);
+            color: var(--text-light);
+            padding: 1rem;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .sidebar {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .quick-links {
+            list-style: none;
+        }
+
+        .quick-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .quick-links a:hover {
+            background: var(--secondary-color);
+            color: white;
+            padding-left: 1rem;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .tip {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 6px;
+        }
+
+        .icon {
+            display: inline-block;
+            width: 24px;
+            text-align: center;
+            margin-right: 8px;
+        }
+
+        .troubleshooting-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .troubleshooting-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .troubleshooting-list li:last-child {
+            border-bottom: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            color: #666;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-ok {
+            background: #28a745;
+        }
+
+        .status-warning {
+            background: #ffc107;
+        }
+
+        .status-error {
+            background: #dc3545;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-folder-open"></i> File Manager Pro</h1>
+            <p class="version">Версия 1.0.0 • Кросс-языковый файловый менеджер</p>
+        </header>
+
+        <nav>
+            <ul class="nav-list">
+                <li><a href="#getting-started"><i class="fas fa-rocket"></i> Начало работы</a></li>
+                <li><a href="#features"><i class="fas fa-star"></i> Возможности</a></li>
+                <li><a href="#navigation"><i class="fas fa-compass"></i> Навигация</a></li>
+                <li><a href="#operations"><i class="fas fa-cogs"></i> Операции</a></li>
+                <li><a href="#shortcuts"><i class="fas fa-keyboard"></i> Горячие клавиши</a></li>
+                <li><a href="#integration"><i class="fas fa-link"></i> Интеграция</a></li>
+                <li><a href="#troubleshooting"><i class="fas fa-wrench"></i> Устранение неисправностей</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-content">
+            <div>
+                <section id="getting-started">
+                    <h2><i class="fas fa-rocket"></i> Начало работы</h2>
+                    <p>File Manager Pro — это профессиональный файловый менеджер, разработанный на трёх языках программирования (C, C++, C#) с полной интеграцией.</p>
+                    
+                    <div class="tip">
+                        <strong><i class="fas fa-lightbulb"></i> Совет:</strong> Перед первым запуском убедитесь, что у вас установлены все необходимые компоненты.
+                    </div>
+
+                    <h3>Системные требования</h3>
+                    <ul>
+                        <li><span class="status-indicator status-ok"></span> Windows 10 или новее (64-bit)</li>
+                        <li><span class="status-indicator status-ok"></span> .NET 6.0 Desktop Runtime</li>
+                        <li><span class="status-indicator status-ok"></span> Visual C++ Redistributable 2015-2022</li>
+                        <li><span class="status-indicator status-ok"></span> 2 GB оперативной памяти</li>
+                        <li><span class="status-indicator status-ok"></span> 200 MB свободного места на диске</li>
+                    </ul>
+
+                    <h3>Установка</h3>
+                    <ol>
+                        <li>Запустите <code>FileManagerPro_Setup.exe</code></li>
+                        <li>Следуйте инструкциям мастера установки</li>
+                        <li>При необходимости перезагрузите компьютер</li>
+                        <li>Запустите программу из меню Пуск или с Рабочего стола</li>
+                    </ol>
+                </section>
+
+                <section id="features">
+                    <h2><i class="fas fa-star"></i> Возможности</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h3><i class="fas fa-layer-group"></i> Трёхуровневая архитектура</h3>
+                            <p>C (ядро) → C++ (логика) → C# (интерфейс)</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-bolt"></i> Высокая производительность</h3>
+                            <p>Оптимизированная работа с тысячами файлов</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-search"></i> Умный поиск</h3>
+                            <p>Поиск с поддержкой wildcards и фильтрацией</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-sync-alt"></i> Кэширование</h3>
+                            <p>Мгновенная загрузка ранее просмотренных папок</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-puzzle-piece"></i> Интеграция с проводником</h3>
+                            <p>Контекстное меню в проводнике Windows</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-chart-pie"></i> Анализ диска</h3>
+                            <p>Детальная информация о свободном месте</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="navigation">
+                    <h2><i class="fas fa-compass"></i> Навигация</h2>
+                    
+                    <h3>Интерфейс программы</h3>
+                    <p>Главное окно состоит из следующих элементов:</p>
+                    <ul>
+                        <li><strong>Панель инструментов:</strong> Быстрый доступ к основным функциям</li>
+                        <li><strong>Дерево папок:</strong> Иерархическое представление файловой системы</li>
+                        <li><strong>Список файлов:</strong> Детальный вид содержимого текущей папки</li>
+                        <li><strong>Адресная строка:</strong> Отображение и редактирование текущего пути</li>
+                        <li><strong>Статус бар:</strong> Информация о выбранных файлах и состоянии диска</li>
+                    </ul>
+
+                    <div class="tip">
+                        <strong><i class="fas fa-lightbulb"></i> Совет:</strong> Используйте двойной клик по папке для быстрой навигации или по файлу для открытия.
+                    </div>
+                </section>
+
+                <section id="operations">
+                    <h2><i class="fas fa-cogs"></i> Операции с файлами</h2>
+                    
+                    <h3>Основные операции</h3>
+                    <ul>
+                        <li><strong>Копирование:</strong> Ctrl+C или через контекстное меню</li>
+                        <li><strong>Вставка:</strong> Ctrl+V для вставки скопированных файлов</li>
+                        <li><strong>Удаление:</strong> Delete или Shift+Delete для полного удаления</li>
+                        <li><strong>Переименование:</strong> F2 или через контекстное меню</li>
+                        <li><strong>Создание папки:</strong> Ctrl+Shift+N или кнопка на панели инструментов</li>
+                    </ul>
+
+                    <h3>Расширенные операции</h3>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h3><i class="fas fa-copy"></i> Пакетные операции</h3>
+                            <p>Выделите несколько файлов и выполните операцию сразу для всех</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-filter"></i> Фильтрация</h3>
+                            <p>Фильтруйте файлы по типу, размеру или дате изменения</p>
+                        </div>
+                        <div class="feature-card">
+                            <h3><i class="fas fa-sort"></i> Сортировка</h3>
+                            <p>Сортируйте по разным критериям кликом по заголовку колонки</p>
+                        </div>
+                    </div>
+
+                    <div class="warning">
+                        <strong><i class="fas fa-exclamation-triangle"></i> Внимание:</strong> Операции удаления и перемещения требуют прав администратора для системных папок.
+                    </div>
+                </section>
+
+                <section id="shortcuts">
+                    <h2><i class="fas fa-keyboard"></i> Горячие клавиши</h2>
+                    
+                    <table class="hotkey-table">
+                        <thead>
+                            <tr>
+                                <th>Действие</th>
+                                <th>Сочетание клавиш</th>
+                                <th>Описание</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Назад</td>
+                                <td>Alt+← или Backspace</td>
+                                <td>Вернуться к предыдущей папке</td>
+                            </tr>
+                            <tr>
+                                <td>Вперёд</td>
+                                <td>Alt+→</td>
+                                <td>Перейти вперёд по истории</td>
+                            </tr>
+                            <tr>
+                                <td>Вверх</td>
+                                <td>Alt+↑</td>
+                                <td>Перейти в родительскую папку</td>
+                            </tr>
+                            <tr>
+                                <td>Обновить</td>
+                                <td>F5</td>
+                                <td>Обновить содержимое папки</td>
+                            </tr>
+                            <tr>
+                                <td>Поиск</td>
+                                <td>Ctrl+F</td>
+                                <td>Активировать строку поиска</td>
+                            </tr>
+                            <tr>
+                                <td>Новая папка</td>
+                                <td>Ctrl+Shift+N</td>
+                                <td>Создать новую папку</td>
+                            </tr>
+                            <tr>
+                                <td>Выделить всё</td>
+                                <td>Ctrl+A</td>
+                                <td>Выделить все файлы в папке</td>
+                            </tr>
+                            <tr>
+                                <td>Свойства</td>
+                                <td>Alt+Enter</td>
+                                <td>Открыть свойства выбранного файла</td>
+                            </tr>
+                            <tr>
+                                <td>Переименовать</td>
+                                <td>F2</td>
+                                <td>Переименовать выбранный файл</td>
+                            </tr>
+                            <tr>
+                                <td>Удалить</td>
+                                <td>Delete</td>
+                                <td>Удалить в корзину</td>
+                            </tr>
+                            <tr>
+                                <td>Полное удаление</td>
+                                <td>Shift+Delete</td>
+                                <td>Удалить без помещения в корзину</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="integration">
+                    <h2><i class="fas fa-link"></i> Интеграция и API</h2>
+                    
+                    <h3>Архитектура взаимодействия</h3>
+                    <div class="code-block">
+// C# вызывает C++ через P/Invoke
+[DllImport("LogicLib_Cpp.dll")]
+private static extern IntPtr CreateNavigator();
+
+// C++ вызывает C функции напрямую
+extern "C" {
+    #include "CoreLib_C/file_ops.h"
+    int result = list_files(path, &files, &count);
+}
+                    </div>
+
+                    <h3>Поддерживаемые форматы интеграции</h3>
+                    <ul>
+                        <li><strong>P/Invoke:</strong> Вызов неуправляемого кода из C#</li>
+                        <li><strong>COM Interop:</strong> Для интеграции с другими приложениями</li>
+                        <li><strong>Контекстное меню:</strong> Интеграция с проводником Windows</li>
+                        <li><strong>Ассоциации файлов:</strong> Открытие специальных форматов</li>
+                    </ul>
+                </section>
+
+                <section id="troubleshooting">
+                    <h2><i class="fas fa-wrench"></i> Устранение неисправностей</h2>
+                    
+                    <ul class="troubleshooting-list">
+                        <li>
+                            <h4><span class="status-indicator status-error"></span> Ошибка: "Не удалось загрузить DLL"</h4>
+                            <p><strong>Решение:</strong> Установите Visual C++ Redistributable 2015-2022 (x64).</p>
+                        </li>
+                        <li>
+                            <h4><span class="status-indicator status-error"></span> Программа не запускается</h4>
+                            <p><strong>Решение:</strong> Установите .NET 6.0 Desktop Runtime.</p>
+                        </li>
+                        <li>
+                            <h4><span class="status-indicator status-warning"></span> Медленная работа с сетевой папкой</h4>
+                            <p><strong>Решение:</strong> Увеличьте таймауты в настройках или используйте кэширование.</p>
+                        </li>
+                        <li>
+                            <h4><span class="status-indicator status-error"></span> Нет прав на операцию</h4>
+                            <p><strong>Решение:</strong> Запустите программу от имени администратора.</p>
+                        </li>
+                        <li>
+                            <h4><span class="status-indicator status-warning"></span> Контекстное меню не появляется</h4>
+                            <p><strong>Решение:</strong> Переустановите программу с опцией "Интеграция с проводником".</p>
+                        </li>
+                    </ul>
+
+                    <h3>Журналы и диагностика</h3>
+                    <p>Журналы программы находятся в папке:</p>
+                    <div class="code-block">
+%LOCALAPPDATA%\FileManagerPro\Logs\
+                    </div>
+                    <p>Для сбора диагностической информации выполните:</p>
+                    <div class="code-block">
+FileManager.exe --diagnostic --output=diagnostic.txt
+                    </div>
+                </section>
+            </div>
+
+            <div class="sidebar">
+                <h3><i class="fas fa-link"></i> Быстрые ссылки</h3>
+                <ul class="quick-links">
+                    <li><a href="#getting-started"><i class="fas fa-play-circle"></i> Быстрый старт</a></li>
+                    <li><a href="#navigation"><i class="fas fa-directions"></i> Навигация</a></li>
+                    <li><a href="#operations"><i class="fas fa-tasks"></i> Операции</a></li>
+                    <li><a href="#shortcuts"><i class="fas fa-keyboard"></i> Горячие клавиши</a></li>
+                    <li><a href="#troubleshooting"><i class="fas fa-life-ring"></i> Помощь при проблемах</a></li>
+                </ul>
+
+                <div class="tip" style="margin-top: 20px;">
+                    <h4><i class="fas fa-info-circle"></i> Дополнительная информация</h4>
+                    <p>Полная документация доступна на сайте разработчика:</p>
+                    <p><a href="https://example.com/docs" style="color: #3498db;">https://example.com/docs</a></p>
+                </div>
+
+                <div class="warning" style="margin-top: 20px;">
+                    <h4><i class="fas fa-exclamation-circle"></i> Важно!</h4>
+                    <p>Регулярно обновляйте программу для получения исправлений безопасности и новых функций.</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>File Manager Pro v1.0.0 • © 2024 FileManager Inc.</p>
+            <p>Документация обновлена: <span id="current-date"></span></p>
+            <p style="margin-top: 10px; font-size: 0.9em; color: #888;">
+                <i class="fas fa-code"></i> Разработано на C, C++ и C# 
+                | <i class="fas fa-shield-alt"></i> Лицензия: MIT
+                | <i class="fas fa-envelope"></i> Поддержка: support@example.com
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Обновление даты
+        document.getElementById('current-date').textContent = 
+            new Date().toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Подсветка текущего раздела
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-list a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if(pageYOffset >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if(link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                    link.style.background = 'var(--secondary-color)';
+                    link.style.color = 'white';
+                } else {
+                    link.style.background = '';
+                    link.style.color = '';
+                }
+            });
+        });
+
+        // Анимация появления секций
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

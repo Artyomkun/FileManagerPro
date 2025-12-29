@@ -1,0 +1,7 @@
+/mnt/d/c/FileManagerPro/Installer/GUI/obj/Release/net8.0/FileManager.csproj.AssemblyReference.cache
+/mnt/d/c/FileManagerPro/Installer/GUI/obj/Release/net8.0/Avalonia/Resources.Inputs.cache
+/mnt/d/c/FileManagerPro/Installer/GUI/obj/Release/net8.0/Avalonia/resources
+/mnt/d/c/FileManagerPro/Installer/GUI/obj/Release/net8.0/FileManager.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/d/c/FileManagerPro/Installer/GUI/obj/Release/net8.0/FileManager.AssemblyInfoInputs.cache
+/mnt/d/c/FileManagerPro/Installer/GUI/obj/Release/net8.0/FileManager.AssemblyInfo.cs
+/mnt/d/c/FileManagerPro/Installer/GUI/obj/Release/net8.0/FileManager.csproj.CoreCompileInputs.cache

@@ -1,0 +1,117 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FileManager"
+        mc:Ignorable="d"
+        x:Class="FileManager.PropertiesDialog"
+        x:DataType="local:PropertiesDialogViewModel"
+        Title="Свойства"
+        Width="500" Height="450"
+        WindowStartupLocation="CenterOwner"
+        MinWidth="400" MinHeight="300">
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Заголовок с иконкой и именем -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+            <!-- Иконка -->
+            <Border Width="48" Height="48" Background="#E0E0E0" CornerRadius="4" 
+                    VerticalAlignment="Center" Margin="0,0,12,0">
+                <Image Source="{Binding Icon}" Width="32" Height="32" 
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            
+            <!-- Имя файла/папки -->
+            <TextBlock Text="{Binding Name}" 
+                       FontSize="18" 
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       TextWrapping="Wrap"/>
+        </StackPanel>
+        
+        <!-- Разделитель -->
+        <Separator Grid.Row="0" Grid.RowSpan="2" Margin="0,55,0,0" Background="LightGray"/>
+        
+        <!-- Основная информация -->
+        <Border Grid.Row="1" BorderBrush="LightGray" BorderThickness="0,1,0,0" Padding="0,10,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Тип:" 
+                           Margin="0,5" Foreground="Gray"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Type}" 
+                           Margin="10,5"/>
+                
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Расположение:" 
+                           Margin="0,5" Foreground="Gray"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding FullPath}" 
+                           Margin="10,5" TextWrapping="Wrap"/>
+                
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Размер:" 
+                           Margin="0,5" Foreground="Gray"/>
+                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding FormattedSize}" 
+                           Margin="10,5"/>
+                
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Изменён:" 
+                           Margin="0,5" Foreground="Gray"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding LastModifiedDisplay}" 
+                           Margin="10,5"/>
+            </Grid>
+        </Border>
+        
+        <!-- Атрибуты файлов -->
+        <Expander Grid.Row="2" Header="Атрибуты файлов" Margin="0,10,0,10" IsExpanded="True">
+            <StackPanel Margin="10,5">
+                <CheckBox x:Name="chkReadOnly" Content="Только для чтения" 
+                          Margin="0,3"
+                          IsChecked="{Binding IsReadOnly}"/>
+                <CheckBox x:Name="chkHidden" Content="Скрытый" 
+                          Margin="0,3"
+                          IsChecked="{Binding IsHidden}"/>
+                <CheckBox x:Name="chkArchive" Content="Архивный" 
+                          Margin="0,3"
+                          IsChecked="{Binding IsArchive}"/>
+            </StackPanel>
+        </Expander>
+        
+        <!-- Статистика -->
+        <Expander Grid.Row="3" Header="Статистика" Margin="0,0,0,10" IsExpanded="True">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="150">
+                <TextBlock x:Name="txtStatistics" 
+                           TextWrapping="Wrap" 
+                           Margin="10,5"
+                           Text="{Binding Statistics}"/>
+            </ScrollViewer>
+        </Expander>
+        
+        <!-- Кнопки -->
+        <Border Grid.Row="4" BorderBrush="LightGray" BorderThickness="0,1,0,0" Padding="0,10,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                <Button x:Name="btnCancel" Content="Отмена" 
+                        Width="80" 
+                        Click="BtnCancel_Click"/>
+                <Button x:Name="btnOK" Content="OK" 
+                        Width="80" 
+                        Click="BtnOK_Click"
+                        IsDefault="True"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

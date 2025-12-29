@@ -1,0 +1,29 @@
+{
+    "$schema": "./config.schema.json",
+    "configVersion": "1.0.0",
+    "application": {
+        "name": "File Manager Pro Demo",
+        "description": "Пример конфигурационного файла",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "dataDirectory": "./data",
+        "logDirectory": "./logs",
+        "tempDirectory": "./temp"
+    },
+    "features": {
+        "enableLogging": true,
+        "autoSave": true,
+        "backupOnExit": false
+    },
+    "ui": {
+        "theme": "dark",
+        "fontSize": 14,
+        "showLineNumbers": true
+    },
+    "shortcuts": {
+        "save": "Ctrl+S",
+        "search": "Ctrl+F",
+        "newFile": "Ctrl+N"
+    }
+}
